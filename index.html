@@ -1,0 +1,2245 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#050505">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-192.png">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+<title>Amix — offline AI tutor</title>
+<style>
+:root{--bg:#070b18;--panel:#0d1427;--panel2:#111c35;--line:#243455;--text:#f4f7ff;--muted:#9eaccb;--blue:#318cff;--violet:#8b5cff;--cyan:#40d8ed;--green:#2bd69b;--pink:#db64f5;--shadow:0 18px 50px #0006}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 20% -10%,#20245b 0,transparent 36%),radial-gradient(ellipse at 100% 35%,#102b50 0,transparent 30%),var(--bg);color:var(--text);font:15px/1.5 Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;min-height:100vh}button,input,textarea,select{font:inherit}button{cursor:pointer;color:inherit}button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:2px solid var(--cyan);outline-offset:2px}
+.app{max-width:1440px;margin:auto;padding:22px;display:grid;grid-template-columns:250px minmax(0,1fr);gap:20px;min-height:100vh}.sidebar,.main{background:#0a1020eF;border:1px solid #253657;border-radius:24px;box-shadow:var(--shadow)}.sidebar{padding:20px 14px;display:flex;flex-direction:column;gap:18px}.brand{display:flex;align-items:center;gap:12px;padding:4px 6px 18px;border-bottom:1px solid #202d49}.logo{width:45px;height:45px;border-radius:15px;background:linear-gradient(135deg,#148fff,#854cff 65%,#d45cf7);display:grid;place-items:center;font-size:24px;box-shadow:0 0 28px #5d5bff55}.brand h1{font-size:20px;margin:0;letter-spacing:-.5px}.brand p{font-size:12px;color:var(--muted);margin:0}.nav{display:grid;gap:6px}.nav button{display:flex;align-items:center;gap:12px;padding:11px 12px;border:1px solid transparent;background:transparent;border-radius:13px;text-align:left;color:#bdc9e2}.nav button .ico{width:24px;text-align:center;font-size:18px}.nav button.active,.nav button:hover{background:linear-gradient(100deg,#263b78aa,#35265b88);border-color:#3c5791;color:white}.status{margin-top:auto;padding:14px;border-radius:16px;background:linear-gradient(145deg,#111f36,#0d1425);border:1px solid #273858}.status strong{display:block;font-size:13px}.status small{color:var(--muted)}.dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 10px #2bd69b;margin-right:7px}
+.main{padding:24px;min-width:0;overflow:hidden}.topbar{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:24px}.eyebrow{font-size:12px;letter-spacing:1.5px;color:#8fa8ff;text-transform:uppercase}.topbar h2{font-size:27px;letter-spacing:-.7px;margin:2px 0}.top-actions{display:flex;align-items:center;gap:8px}.chip{font-size:12px;border:1px solid #2e4266;border-radius:999px;padding:7px 11px;color:#b7c6e8;background:#111b31;white-space:nowrap}.hero{border:1px solid #354a80;border-radius:22px;padding:25px;background:linear-gradient(115deg,#13264b,#17183e 58%,#25133b);position:relative;overflow:hidden;margin-bottom:20px}.hero:after{content:"✦";position:absolute;right:30px;top:0;font-size:130px;color:#8a85ff22}.hero h3{font-size:clamp(22px,3vw,31px);line-height:1.2;margin:0 0 9px;max-width:580px}.hero p{color:#b8c8ea;max-width:620px;margin:0 0 18px}.btn{border:1px solid #4264a0;background:#142546;border-radius:12px;padding:10px 14px;font-weight:650}.btn.primary{border:0;background:linear-gradient(100deg,#168fff,#6556ff 65%,#b44ef0);box-shadow:0 7px 22px #4b51e344}.btn:hover{filter:brightness(1.13)}.btn.ghost{background:#0c1529;border-color:#2a3b5d}.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px}.tile{padding:17px;background:linear-gradient(145deg,#101a30,#0d1425);border:1px solid #263858;border-radius:17px;text-align:left;min-height:125px;transition:.15s}.tile:hover{transform:translateY(-2px);border-color:#6279ce}.tile .tileicon{font-size:24px;width:43px;height:43px;display:grid;place-items:center;border-radius:13px;background:#253a70;margin-bottom:11px}.tile strong{display:block;font-size:14px}.tile small{color:var(--muted);display:block;margin-top:3px}.sectionhead{display:flex;align-items:center;justify-content:space-between;margin:24px 0 12px}.sectionhead h3{margin:0;font-size:17px}.muted{color:var(--muted)}.subjectrow{display:flex;flex-wrap:wrap;gap:8px}.subject{border:1px solid #2a3b5d;border-radius:11px;padding:8px 11px;background:#10192c;color:#c7d4ef;font-size:13px}.subject:hover,.subject.active{background:#273a70;border-color:#6583ff;color:white}
+.view{display:none}.view.active{display:block}.chatlayout{display:grid;grid-template-columns:minmax(0,1fr) 230px;gap:16px}.chatbox{display:flex;flex-direction:column;min-height:570px;border:1px solid #263858;border-radius:18px;overflow:hidden;background:#080f1d}.chathead{padding:14px 17px;border-bottom:1px solid #1e2d49;display:flex;justify-content:space-between;align-items:center}.messages{padding:18px;display:flex;flex-direction:column;gap:15px;flex:1;overflow:auto;max-height:500px}.msg{max-width:90%;padding:13px 15px;border-radius:16px;white-space:pre-wrap;overflow-wrap:anywhere}.msg.ai{align-self:flex-start;background:#111e35;border:1px solid #283b5e}.msg.user{align-self:flex-end;background:linear-gradient(130deg,#21488d,#473b91);border:1px solid #5366bb}.msg .who{font-size:11px;color:#9db4ff;margin-bottom:5px;font-weight:700}.composer{padding:12px;border-top:1px solid #1e2d49;display:flex;gap:8px;align-items:flex-end}.composer textarea{resize:vertical;min-height:45px;max-height:150px;flex:1;background:#101a2d;border:1px solid #2c4064;border-radius:13px;color:white;padding:12px}.sidecard{border:1px solid #263858;border-radius:18px;padding:15px;background:#0c1426;height:max-content}.sidecard h3{margin:0 0 10px;font-size:15px}.quick{display:block;width:100%;text-align:left;margin:7px 0;padding:10px;border:1px solid #253657;border-radius:11px;background:#101b30;color:#dce5fa;font-size:13px}.quick:hover{border-color:#647aff}.field{width:100%;background:#0d172b;border:1px solid #2a3d60;border-radius:12px;color:#f5f7ff;padding:12px}.upload{display:block;border:1px dashed #50699b;border-radius:16px;padding:25px;text-align:center;background:#0d172a;cursor:pointer}.upload input{display:none}.preview{max-width:100%;max-height:280px;display:block;margin:14px auto;border-radius:12px}.result{margin-top:16px;background:#101d33;border:1px solid #2c4269;border-radius:16px;padding:18px;white-space:pre-wrap}.settingsrow{padding:15px 0;border-bottom:1px solid #1d2c48;display:flex;justify-content:space-between;gap:12px;align-items:center}.toggle{accent-color:#655bff;width:18px;height:18px}.historyitem{padding:14px;border:1px solid #263858;border-radius:13px;background:#0e172a;margin:8px 0;cursor:pointer}.historyitem:hover{border-color:#637bdb}.footer{margin-top:24px;text-align:center;font-size:12px;color:#7183a7}.notice{border:1px solid #62513b;background:#251e16;color:#f2d4a1;border-radius:12px;padding:12px;font-size:12px;margin-top:14px}
+/* Smooth motion and account UI */
+*{scroll-behavior:smooth}
+.view{opacity:0;transform:translateY(9px);transition:opacity .24s ease,transform .24s ease;display:none}
+.view.active{display:block;animation:viewEnter .32s cubic-bezier(.2,.75,.25,1) both}
+@keyframes viewEnter{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.tile,.nav button,.btn,.subject,.quick,.historyitem{transition:transform .18s ease,border-color .2s ease,background .2s ease,filter .2s ease,box-shadow .2s ease}
+button:active{transform:scale(.975)}
+.btn.primary:hover{box-shadow:0 8px 28px #5d5bff66}
+.modal-backdrop{position:fixed;inset:0;z-index:50;display:none;align-items:center;justify-content:center;padding:16px;background:#020511b8;backdrop-filter:blur(12px);opacity:0;transition:opacity .22s ease}
+.modal-backdrop.open{display:flex;opacity:1;animation:fadeIn .22s ease both}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.modal{width:min(100%,440px);border:1px solid #344a77;border-radius:24px;padding:24px;background:linear-gradient(145deg,#121d36,#090f1e);box-shadow:0 25px 90px #0009;transform:translateY(12px) scale(.985);animation:modalEnter .25s ease both}
+@keyframes modalEnter{to{transform:translateY(0) scale(1)}}
+.modal-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
+.modal-top h3{margin:0;font-size:22px}
+.close-btn{width:35px;height:35px;border-radius:11px;border:1px solid #2d4064;background:#111c31}
+.auth-tabs{display:grid;grid-template-columns:1fr 1fr;gap:6px;padding:5px;background:#080e1c;border:1px solid #263858;border-radius:13px;margin-bottom:17px}
+.auth-tabs button{border:0;border-radius:9px;padding:9px;background:transparent;color:#9eaccb}
+.auth-tabs button.active{background:#293b71;color:#fff}
+.auth-form{display:grid;gap:12px}
+.auth-form label{font-size:12px;color:#b5c3e1;display:grid;gap:6px}
+.auth-form input{width:100%;background:#0a1325;border:1px solid #2a3d60;border-radius:12px;padding:12px;color:white}
+.auth-note{font-size:12px;color:#8f9fbe;margin:12px 0 0}
+.account-btn{display:flex;align-items:center;gap:9px;width:100%;border:1px solid #304365;background:#111b30;border-radius:13px;padding:10px;text-align:left}
+.avatar{width:31px;height:31px;display:grid;place-items:center;border-radius:50%;background:linear-gradient(135deg,#268cff,#9b55ff);font-weight:800}
+.account-btn small{display:block;color:#9eaccb;font-size:11px}
+.toast{position:fixed;left:50%;bottom:24px;z-index:70;transform:translate(-50%,15px);opacity:0;pointer-events:none;padding:11px 16px;border:1px solid #3a5482;border-radius:13px;background:#111d34;box-shadow:var(--shadow);transition:opacity .2s,transform .2s;max-width:calc(100% - 28px);text-align:center}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
+@media(max-width:980px){.app{grid-template-columns:1fr;padding:12px}.sidebar{padding:12px;position:sticky;top:6px;z-index:5;backdrop-filter:blur(18px)}.brand{border:0;padding:2px 6px}.nav{display:flex;overflow:auto}.nav button{white-space:nowrap;padding:9px}.nav button .ico{width:auto}.status{display:none}.main{padding:17px}.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.chatlayout{grid-template-columns:1fr}.chatlayout .sidecard{display:none}}@media(max-width:520px){.app{padding:7px;gap:10px}.sidebar,.main{border-radius:18px}.main{padding:13px}.topbar h2{font-size:22px}.topbar{align-items:flex-start}.top-actions .chip{display:none}.hero{padding:18px}.grid{gap:8px}.tile{padding:12px;min-height:116px}.tile .tileicon{width:37px;height:37px}.nav button{font-size:12px;gap:6px}.nav button .ico{font-size:15px}.messages{padding:12px}.msg{max-width:98%}}
+
+/* ===== Aurora Motion Pack ===== */
+body:before{content:"";position:fixed;inset:-30%;z-index:-1;pointer-events:none;background:conic-gradient(from 0deg at 50% 50%,#3157ff12,#a13cff13,#23d9ff0c,#3157ff12);filter:blur(60px);animation:auroraDrift 26s linear infinite}
+@keyframes auroraDrift{0%{transform:rotate(0deg) scale(1)}50%{transform:rotate(180deg) scale(1.08)}100%{transform:rotate(360deg) scale(1)}}
+.logo{position:relative;isolation:isolate;animation:logoFloat 4.5s ease-in-out infinite,logoGlow 3s ease-in-out infinite alternate}
+.logo:after{content:"";position:absolute;inset:-5px;border-radius:18px;border:1px solid #7e91ff66;animation:ringPulse 2.8s ease-out infinite;z-index:-1}
+@keyframes logoFloat{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-3px) rotate(3deg)}}
+@keyframes logoGlow{from{box-shadow:0 0 15px #5d5bff33}to{box-shadow:0 0 32px #a95bff88}}
+@keyframes ringPulse{0%{transform:scale(.9);opacity:.8}100%{transform:scale(1.3);opacity:0}}
+.hero{isolation:isolate}
+.hero:before{content:"";position:absolute;z-index:-1;inset:-80%;background:linear-gradient(110deg,transparent 43%,#ffffff0c 49%,#8baaff20 50%,transparent 57%);transform:translateX(-40%);animation:heroShine 8s ease-in-out infinite}
+@keyframes heroShine{0%,25%{transform:translateX(-45%)}70%,100%{transform:translateX(45%)}}
+.hero:after{animation:starBreathe 5s ease-in-out infinite;transform-origin:80% 50%}
+@keyframes starBreathe{0%,100%{transform:scale(.92) rotate(-8deg);opacity:.6}50%{transform:scale(1.08) rotate(8deg);opacity:1}}
+.tile{position:relative;overflow:hidden;isolation:isolate}
+.tile:before{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(120deg,transparent 25%,#839bff13 50%,transparent 75%);transform:translateX(-130%);transition:transform .65s ease}
+.tile:hover:before{transform:translateX(130%)}
+.tile:hover{box-shadow:0 12px 28px #03071288,0 0 0 1px #7187ff18;transform:translateY(-4px) scale(1.012)}
+.tileicon{transition:transform .35s cubic-bezier(.2,.8,.2,1),box-shadow .35s}
+.tile:hover .tileicon{transform:rotate(-7deg) scale(1.09);box-shadow:0 0 22px #5b79ff40}
+.nav button{position:relative;overflow:hidden}
+.nav button:after{content:"";position:absolute;left:12px;right:12px;bottom:4px;height:2px;border-radius:5px;background:linear-gradient(90deg,var(--blue),var(--pink));transform:scaleX(0);transform-origin:left;transition:transform .24s}
+.nav button.active:after{transform:scaleX(1)}
+.btn{position:relative;overflow:hidden}
+.btn:after{content:"";position:absolute;inset:-50% auto -50% -60%;width:35%;transform:rotate(18deg);background:linear-gradient(90deg,transparent,#ffffff35,transparent);transition:left .65s ease}
+.btn:hover:after{left:140%}
+.btn.primary{background-size:180% 180%;animation:gradientFlow 7s ease infinite}
+@keyframes gradientFlow{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+.chip{transition:border-color .2s,background .2s,transform .2s}
+.chip:hover{border-color:#758bff;background:#192747;transform:translateY(-1px)}
+.status .dot{animation:dotPulse 1.8s ease-in-out infinite}
+@keyframes dotPulse{0%,100%{box-shadow:0 0 0 0 #2bd69b66}50%{box-shadow:0 0 0 6px #2bd69b00}}
+.view.active{animation:viewEnter .38s cubic-bezier(.16,1,.3,1) both}
+.view.active .hero{animation:heroRise .5s .02s both}
+.view.active .tile{animation:tileRise .45s both;animation-delay:calc(var(--i,0)*45ms)}
+@keyframes heroRise{from{opacity:0;transform:translateY(13px) scale(.99);filter:blur(3px)}to{opacity:1;transform:translateY(0) scale(1);filter:blur(0)}}
+@keyframes tileRise{from{opacity:0;transform:translateY(13px) scale(.985)}to{opacity:1;transform:translateY(0) scale(1)}}
+.msg{animation:messageIn .3s cubic-bezier(.16,1,.3,1) both}
+@keyframes messageIn{from{opacity:0;transform:translateY(8px) scale(.99)}to{opacity:1;transform:translateY(0) scale(1)}}
+.composer:focus-within{background:#0b1426;box-shadow:inset 0 0 0 1px #506eff55}
+.composer textarea{transition:border-color .2s,box-shadow .2s}
+.composer textarea:focus{border-color:#687eff;box-shadow:0 0 0 3px #586bff20}
+.upload{transition:background .25s,border-color .25s,transform .25s}
+.upload:hover{background:#142344;border-color:#8a8cff;transform:translateY(-2px)}
+.preview{animation:previewIn .35s ease both}
+@keyframes previewIn{from{opacity:0;transform:scale(.97)}to{opacity:1;transform:scale(1)}}
+.historyitem{animation:messageIn .3s ease both}
+.subject{transition:all .2s ease}
+.subject:hover{transform:translateY(-2px);box-shadow:0 6px 18px #0004}
+.modal-backdrop.open .modal{animation:modalEnter .34s cubic-bezier(.16,1,.3,1) both}
+.auth-tabs button{transition:background .2s,color .2s,transform .2s}
+.account-btn{transition:border-color .2s,background .2s,transform .2s}
+.account-btn:hover{border-color:#7285ed;background:#172442;transform:translateY(-1px)}
+/* Decorative floating particles, generated locally */
+.particle-layer{position:fixed;inset:0;overflow:hidden;pointer-events:none;z-index:-1}
+.particle{position:absolute;width:3px;height:3px;border-radius:50%;background:#8aa7ff;opacity:0;box-shadow:0 0 12px #788aff;animation:particleRise var(--dur,12s) linear infinite;animation-delay:var(--delay,0s);left:var(--left,50%);bottom:-10px}
+@keyframes particleRise{0%{transform:translate3d(0,0,0) scale(.6);opacity:0}10%{opacity:.55}75%{opacity:.35}100%{transform:translate3d(var(--drift,20px),-110vh,0) scale(1.4);opacity:0}}
+@media(prefers-reduced-motion:reduce){body:before,.logo,.logo:after,.hero:before,.hero:after,.status .dot,.btn.primary,.particle{animation:none!important}.tile,.nav button,.btn,.subject,.quick,.historyitem,.account-btn{transition:none!important}.view.active .hero,.view.active .tile{animation:none!important}}
+
+
+/* Dust disintegration / reassembly transition */
+#snapFx{position:fixed;inset:0;z-index:90;pointer-events:none;overflow:hidden;opacity:1;visibility:hidden}
+#snapFx.play{visibility:visible}
+.snap-flash,.snap-ring,.snap-rays{display:none!important}
+.dust-cloud{position:absolute;inset:0;overflow:hidden}
+.dust-particle{position:absolute;left:var(--px);top:var(--py);width:var(--size);height:var(--size);border-radius:var(--shape);background:var(--dust);box-shadow:0 0 5px color-mix(in srgb,var(--dust),transparent 35%);opacity:0;transform:translate3d(0,0,0) rotate(0) scale(1);will-change:transform,opacity}
+#snapFx.out .dust-particle{animation:dustAway var(--dur,.56s) cubic-bezier(.45,0,.95,.45) var(--delay,0s) both}
+#snapFx.in .dust-particle{animation:dustGather var(--dur,.72s) cubic-bezier(.16,1,.3,1) var(--delay,0s) both}
+@keyframes dustAway{0%{opacity:0;transform:translate3d(0,0,0) rotate(0) scale(1)}10%{opacity:var(--opacity,.85)}38%{opacity:var(--opacity,.85);transform:translate3d(var(--mx),var(--my),0) rotate(var(--spin30)) scale(.72)}72%{opacity:.72;transform:translate3d(var(--qx),var(--qy),0) rotate(var(--spin75)) scale(.32)}100%{opacity:0;transform:translate3d(var(--dx),var(--dy),0) rotate(var(--spin)) scale(.015)}}
+@keyframes dustGather{0%{opacity:0;transform:translate3d(var(--dx),var(--dy),0) rotate(var(--spin)) scale(.015);filter:blur(2px)}22%{opacity:var(--opacity,.8)}68%{opacity:.75;transform:translate3d(var(--mx),var(--my),0) rotate(calc(var(--spin)*.35)) scale(.55);filter:blur(.4px)}100%{opacity:0;transform:translate3d(0,0,0) rotate(0) scale(.9);filter:blur(0)}}
+.view.dust-out{animation:contentDissolve .42s ease-in both!important}
+.view.dust-in{animation:contentForm .58s cubic-bezier(.16,1,.3,1) both!important}
+@keyframes contentDissolve{0%{opacity:1;filter:blur(0);transform:scale(1)}100%{opacity:0;filter:blur(3px);transform:scale(.99)}}
+@keyframes contentForm{0%{opacity:0;filter:blur(3px);transform:scale(.99)}65%{opacity:1;filter:blur(0);transform:scale(1.003)}100%{opacity:1;transform:scale(1)}}
+@media(prefers-reduced-motion:reduce){#snapFx{display:none}.view.dust-out,.view.dust-in{animation:none!important}}.view.snap-out,.view.snap-in{animation:none!important}}
+
+
+/* Accessibility and interaction guard: the dust layer is visual only. */
+#snapFx,#snapFx *{pointer-events:none!important}
+#snapFx{z-index:15!important}
+.view.active{visibility:visible;pointer-events:auto}
+.nav{position:relative;z-index:25}
+
+
+
+/* ===== Responsive layout: phones, tablets, laptops and large screens ===== */
+html{width:100%;min-width:0;-webkit-text-size-adjust:100%;text-size-adjust:100%;scroll-padding-top:12px}
+body{width:100%;min-width:0;overflow-x:hidden;min-height:100vh;min-height:100dvh}
+.app{width:100%;min-width:0}
+.sidebar,.main,.view,.chatlayout,.chatbox,.hero,.tile,.sidecard{min-width:0;max-width:100%}
+img,video,canvas,svg,iframe{max-width:100%}
+input,textarea,select{max-width:100%;min-width:0}
+button{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+.nav{min-width:0;overscroll-behavior-x:contain;scrollbar-width:thin}
+.nav button{min-height:44px;flex-shrink:0}
+.btn,.subject,.quick,.account-btn,.close-btn{min-height:42px}
+.composer textarea{width:100%;min-width:0;overflow-wrap:anywhere}
+.messages{overscroll-behavior:contain;scrollbar-gutter:stable}
+.msg,.result,.notice,.historyitem,.tile,.hero p{overflow-wrap:anywhere;word-break:normal}
+.modal-backdrop{padding:max(12px,env(safe-area-inset-top)) max(12px,env(safe-area-inset-right)) max(12px,env(safe-area-inset-bottom)) max(12px,env(safe-area-inset-left));overflow-y:auto}
+.modal{max-height:calc(100dvh - 24px);overflow-y:auto}
+.toast{bottom:max(16px,env(safe-area-inset-bottom))}
+
+@media (min-width:1400px){.app{padding:26px;gap:24px}.main{padding:30px}.sidebar{padding:22px 16px}}
+@media (max-width:1100px){
+  .app{grid-template-columns:210px minmax(0,1fr);gap:14px;padding:14px}
+  .sidebar{padding:16px 10px;gap:14px}
+  .main{padding:20px}
+  .nav button{gap:8px;padding:10px}
+  .chatlayout{grid-template-columns:minmax(0,1fr)}
+  .chatlayout .sidecard{display:none}
+}
+@media (max-width:800px){
+  .app{grid-template-columns:minmax(0,1fr);padding:10px;gap:10px}
+  .sidebar{position:sticky;top:0;z-index:30;padding:10px 12px;gap:8px;border-radius:16px;backdrop-filter:blur(18px);background:#0a1020f5}
+  .brand{padding:0 2px 7px;gap:9px}
+  .logo{width:36px;height:36px;border-radius:12px;font-size:20px;flex:0 0 auto}
+  .brand h1{font-size:17px}.brand p{font-size:11px}
+  .nav{display:flex;gap:6px;overflow-x:auto;overflow-y:hidden;padding:1px 1px 5px;scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch}
+  .nav button{white-space:nowrap;scroll-snap-align:start;padding:9px 11px;font-size:13px}
+  .nav button .ico{width:auto;font-size:16px}
+  .account-btn{padding:7px 9px;min-height:40px}
+  .status{display:none}
+  .main{padding:18px;border-radius:18px}
+  .chatbox{min-height: min(68dvh,620px);min-height:min(68vh,620px)}
+  .messages{max-height:none;min-height:180px;flex:1}
+  .grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (max-width:520px){
+  .app{padding:6px;gap:7px}
+  .sidebar{padding:8px;border-radius:14px}
+  .brand{padding-bottom:5px}
+  .brand p{display:none}
+  .nav{margin:0 -1px}
+  .nav button{font-size:12px;padding:8px 10px;gap:6px;min-height:42px}
+  .nav button .ico{font-size:15px}
+  .account-btn{width:100%;}
+  .main{padding:13px;border-radius:15px}
+  .topbar{align-items:flex-start;gap:8px;margin-bottom:16px}
+  .topbar h2{font-size:clamp(19px,5.5vw,23px);line-height:1.2;letter-spacing:-.4px}
+  .eyebrow{font-size:10px;letter-spacing:1px}
+  .top-actions{gap:5px;flex-wrap:wrap;justify-content:flex-end}
+  .top-actions .chip{display:none}
+  .top-actions #topAccount{display:inline-flex;align-items:center;justify-content:center;padding:6px 8px;font-size:12px;min-height:38px}
+  .hero{padding:16px;border-radius:17px;margin-bottom:15px}
+  .hero h3{font-size:clamp(21px,6vw,27px);max-width:100%}
+  .hero p{font-size:14px;line-height:1.5}
+  .hero:after{right:8px;font-size:90px}
+  .btn{padding:10px 12px;max-width:100%;white-space:normal}
+  .grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+  .tile{padding:11px;border-radius:14px;min-height:0}
+  .tile .tileicon{width:35px;height:35px;font-size:20px;margin-bottom:8px}
+  .tile strong{font-size:13px;line-height:1.35}
+  .tile small{font-size:11px;line-height:1.4}
+  .sectionhead{margin:19px 0 10px;gap:8px;align-items:flex-start}
+  .sectionhead h3{font-size:16px}
+  .subjectrow{gap:6px}
+  .subject{font-size:12px;padding:8px 9px}
+  .chatbox{min-height:58vh;min-height:58dvh;border-radius:14px}
+  .chathead{padding:11px 12px;gap:8px;flex-wrap:wrap}
+  .messages{padding:10px;gap:10px}
+  .msg{max-width:100%;padding:10px 11px;font-size:14px}
+  .composer{padding:8px;gap:6px;align-items:stretch}
+  .composer textarea{min-height:44px;max-height:120px;padding:10px;font-size:16px;resize:vertical}
+  .composer .btn{padding:9px 10px;min-width:44px}
+  .upload{padding:18px 12px}
+  .result{padding:13px;font-size:14px}
+  .settingsrow{padding:12px 0;align-items:flex-start}
+  .settingsrow label,.settingsrow span{min-width:0;overflow-wrap:anywhere}
+  .modal{padding:18px;border-radius:18px;width:100%}
+  .modal-top h3{font-size:20px}
+  .footer{font-size:11px}
+}
+@media (max-width:360px){
+  .main{padding:10px}
+  .grid{grid-template-columns:minmax(0,1fr)}
+  .tile{display:grid;grid-template-columns:36px minmax(0,1fr);column-gap:10px;align-items:center}
+  .tile .tileicon{grid-row:span 2;margin:0}
+  .tile strong,.tile small{min-width:0}
+  .topbar{flex-direction:column}
+  .top-actions{justify-content:flex-start}
+  .composer{flex-wrap:wrap}
+  .composer textarea{flex-basis:100%}
+  .composer .btn{flex:1}
+}
+@media (orientation:landscape) and (max-height:520px) and (max-width:900px){
+  .sidebar{position:relative;top:auto}
+  .brand{display:none}
+  .chatbox{min-height:65vh}
+  .messages{max-height:42vh}
+  .modal{max-height:90vh}
+}
+@media (hover:none){
+  .tile:hover,.subject:hover,.upload:hover,.account-btn:hover{transform:none;box-shadow:none}
+  .btn:hover:after{left:-60%}
+}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+
+
+/* ===== AETHER-inspired monochrome visual system ===== */
+:root{
+ --bg:#050505;--panel:#0b0b0b;--panel2:#131313;--line:rgba(255,255,255,.08);
+ --text:#f5f5f5;--muted:#929292;--blue:#fff;--violet:#bdbdbd;--cyan:#fff;
+ --green:#4ade80;--pink:#d4d4d4;--shadow:0 24px 70px #000b;
+}
+body{
+ background:radial-gradient(ellipse at 50% 0%,#171717 0%,#050505 46%,#000 100%);
+ color:var(--text);
+}
+.sidebar,.main{
+ background:rgba(10,10,10,.96);border-color:rgba(255,255,255,.075);
+ box-shadow:var(--shadow);
+}
+.sidebar{backdrop-filter:blur(18px)}
+.brand{border-bottom-color:var(--line)}
+.logo{
+ background:linear-gradient(145deg,#fff,#777);color:#050505;
+ box-shadow:0 0 26px #ffffff18;border-radius:14px;
+}
+.brand p,.muted,.tile small,.hero p,.sidecard small{color:#999}
+.eyebrow{color:#aaa}
+.nav button{color:#a0a0a0}
+.nav button.active,.nav button:hover{
+ background:rgba(255,255,255,.075);border-color:rgba(255,255,255,.1);color:#fff;
+}
+.status{background:linear-gradient(145deg,#171717,#0b0b0b);border-color:var(--line)}
+.dot{background:#4ade80;box-shadow:0 0 10px #4ade80}
+.main{background:radial-gradient(ellipse at 50% 10%,#141414 0%,#0b0b0b 68%)}
+.chip{border-color:var(--line);background:#141414;color:#bbb}
+.hero{
+ border-color:rgba(255,255,255,.1);
+ background:radial-gradient(ellipse at 80% 0%,#242424 0%,transparent 48%),linear-gradient(125deg,#191919,#0d0d0d 65%,#111);
+ box-shadow:inset 0 1px 0 #ffffff08;
+}
+.hero:after{color:#ffffff0b}
+.btn{border-color:#383838;background:#1a1a1a}
+.btn.primary{
+ background:#fff;color:#050505;border:1px solid #fff;box-shadow:0 8px 24px #0007;
+}
+.btn.primary:hover{box-shadow:0 8px 28px #ffffff1c}
+.btn.ghost{background:#111;border-color:#333}
+.grid .tile,.tile{
+ background:linear-gradient(145deg,#171717,#101010);border-color:#292929;
+}
+.tile:hover{border-color:#555}
+.tile .tileicon{background:linear-gradient(145deg,#303030,#181818);color:#fff}
+.subject{background:#151515;border-color:#303030;color:#ccc}
+.subject:hover,.subject.active{background:#fff;border-color:#fff;color:#000}
+.chatbox{background:#080808;border-color:#292929}
+.chathead,.composer{border-color:#242424}
+.messages{scrollbar-width:thin;scrollbar-color:#444 transparent}
+.msg.ai{background:#151515;border-color:#292929}
+.msg.user{background:#f1f1f1;color:#080808;border-color:#f1f1f1}
+.msg .who{color:#aaa}
+.msg.user .who{color:#555}
+.composer textarea,.field,.auth-form input{
+ background:#141414;border-color:#333;color:#fff;
+}
+.composer textarea:focus,.field:focus,.auth-form input:focus{border-color:#777;outline-color:#aaa}
+.sidecard,.historyitem,.quick,.result,.upload{
+ background:#111;border-color:#292929;
+}
+.quick{color:#ddd}
+.quick:hover,.historyitem:hover{border-color:#666}
+.upload{border-style:dashed;color:#ddd}
+.result{background:#141414}
+.settingsrow{border-color:#252525}
+.toggle{accent-color:#fff}
+.modal-backdrop{background:#000c}
+.modal{background:linear-gradient(145deg,#191919,#090909);border-color:#383838}
+.close-btn{background:#161616;border-color:#383838}
+.auth-tabs{background:#080808;border-color:#292929}
+.auth-tabs button{color:#999}
+.auth-tabs button.active{background:#fff;color:#000}
+.auth-form label{color:#bbb}
+.auth-note{color:#999}
+.notice{border-color:#514637;background:#1d1914;color:#e5d0ad}
+input,textarea,select{color-scheme:dark}
+button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{
+ outline:2px solid #aaa;outline-offset:3px
+}
+@media(max-width:900px){
+ .sidebar,.main{border-color:rgba(255,255,255,.08)}
+ .nav button.active,.nav button:hover{background:#202020}
+ .rightcol{background:#0b0b0b}
+}
+@media(max-width:520px){
+ body{background:#050505}
+ .app{padding:5px}
+ .sidebar,.main{box-shadow:0 12px 35px #0009}
+ .hero{background:radial-gradient(ellipse at 100% 0%,#252525 0%,transparent 55%),linear-gradient(125deg,#181818,#0c0c0c)}
+}
+@media(prefers-reduced-motion:reduce){
+ *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+}
+
+
+/* Final restrained monochrome polish: account controls and attachment */
+:root{--bg:#070707;--panel:#101010;--panel2:#171717;--line:#303030;--text:#f5f5f5;--muted:#a3a3a3;--blue:#bdbdbd;--violet:#d4d4d4;--cyan:#e5e5e5;--green:#bdbdbd;--pink:#d4d4d4;--shadow:0 18px 50px #0008}
+body{background:radial-gradient(ellipse at 20% -10%,#202020 0,transparent 36%),radial-gradient(ellipse at 100% 35%,#141414 0,transparent 30%),var(--bg)}
+button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:2px solid #d4d4d4;outline-offset:2px}
+.account-btn{background:#111;border:1px solid #333;color:#f5f5f5;border-radius:12px;box-shadow:none}
+.account-btn:hover{background:#1b1b1b;border-color:#666;transform:translateY(-1px)}
+.avatar{background:#242424;border:1px solid #444;color:#fff;box-shadow:none}
+.account-btn small{color:#aaa}
+#topAccount.chip{background:#111;border-color:#333;color:#eee}
+#topAccount.chip:hover{background:#202020;border-color:#666;transform:translateY(-1px)}
+.attach-btn{width:46px;min-width:46px;height:46px;min-height:46px;padding:0;display:grid;place-items:center;flex:0 0 46px;background:#111!important;border:1px solid #383838!important;border-radius:13px!important;color:#f5f5f5;box-shadow:none!important}
+.attach-btn svg{width:20px;height:20px;display:block;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.attach-btn:hover{background:#202020!important;border-color:#777!important;filter:none;transform:translateY(-1px)}
+.attach-btn:active{transform:scale(.97)}
+.composer{background:#0c0c0c;border-color:#292929}
+.composer textarea{background:#141414;border-color:#383838;color:#f5f5f5}
+.composer textarea:focus{border-color:#777;box-shadow:0 0 0 3px #ffffff0d}
+.btn.primary{background:#f2f2f2!important;color:#111!important;border:1px solid #f2f2f2!important;box-shadow:none!important;animation:none!important}
+.btn.primary:hover{background:#d9d9d9!important;box-shadow:none!important}
+.btn.primary:after{display:none}
+.chip{background:#111;border-color:#333;color:#ccc}
+.modal{background:#111;border-color:#383838}
+.auth-tabs{background:#0b0b0b;border-color:#303030}
+.auth-tabs button.active{background:#292929;color:#fff}
+.auth-form input{background:#151515;border-color:#383838}
+.close-btn{background:#171717;border-color:#383838}
+.toast{background:#151515;border-color:#3a3a3a}
+@media(max-width:600px){.attach-btn{width:42px;min-width:42px;height:42px;min-height:42px;flex-basis:42px}.composer{gap:7px;padding:9px}.attach-btn svg{width:19px;height:19px}}
+
+
+/* AETHER-inspired monochrome visual pass */
+:root{
+ --bg:#030303;--panel:#0a0a0a;--panel2:#111;--line:#292929;
+ --text:#f7f7f7;--muted:#929292;--blue:#fff;--violet:#bdbdbd;--cyan:#fff;
+ --green:#e6e6e6;--pink:#c8c8c8;--shadow:0 28px 90px #000d;
+}
+html{background:#000}
+body{
+ background:radial-gradient(ellipse at 50% 0%,#191919 0%,#080808 36%,#000 78%)!important;
+ color:#f6f6f6;isolation:isolate;
+}
+body:before{
+ content:"";position:fixed;inset:-35%;z-index:-1;pointer-events:none;
+ background:radial-gradient(ellipse at 28% 35%,#ffffff0b,transparent 30%),radial-gradient(ellipse at 72% 58%,#ffffff08,transparent 32%);
+ filter:blur(30px);animation:ambientDrift 18s ease-in-out infinite alternate;
+}
+@keyframes ambientDrift{0%{transform:translate3d(-2%,1%,0) scale(1)}100%{transform:translate3d(3%,-2%,0) scale(1.08)}}
+.app{position:relative;gap:16px;padding:18px;max-width:1480px}
+.sidebar,.main{
+ background:linear-gradient(145deg,#101010f5,#070707f5)!important;
+ border:1px solid #ffffff17!important;border-radius:25px;
+ box-shadow:0 30px 100px #000c,inset 0 1px #ffffff09,0 0 45px #ffffff05;
+ position:relative;overflow:hidden;
+}
+.sidebar:before,.main:before{
+ content:"";position:absolute;top:-170px;left:12%;width:75%;height:240px;pointer-events:none;
+ background:radial-gradient(ellipse,#ffffff0d 0%,#ffffff04 36%,transparent 72%);
+ filter:blur(16px);animation:panelGlow 9s ease-in-out infinite alternate;
+}
+@keyframes panelGlow{from{transform:translateX(-7%) scale(.88);opacity:.55}to{transform:translateX(8%) scale(1.12);opacity:1}}
+.sidebar{padding:22px 15px;gap:20px}
+.brand{border-color:#ffffff12}
+.logo{
+ color:#050505;background:radial-gradient(circle at 32% 25%,#fff,#bcbcbc 48%,#333 100%)!important;
+ border:1px solid #ffffff8a;box-shadow:0 0 22px #ffffff25,inset 0 1px #ffffffaa;
+ animation:logoBreath 4s ease-in-out infinite;position:relative;overflow:hidden;
+}
+.logo:after{content:"";position:absolute;inset:-80% -30%;background:linear-gradient(110deg,transparent 42%,#ffffffa0 50%,transparent 58%);transform:translateX(-75%);animation:logoSweep 6s ease-in-out infinite}
+@keyframes logoBreath{0%,100%{box-shadow:0 0 18px #ffffff18,inset 0 1px #ffffffaa}50%{box-shadow:0 0 34px #ffffff35,inset 0 1px #fff}}
+@keyframes logoSweep{0%,65%{transform:translateX(-75%)}85%,100%{transform:translateX(75%)}}
+.brand h1{letter-spacing:.2px}
+.brand p,.muted,.sidebar .status small{color:#888!important}
+.nav button{color:#a5a5a5;border:1px solid transparent;position:relative;overflow:hidden}
+.nav button.active,.nav button:hover{
+ background:linear-gradient(100deg,#ffffff13,#ffffff06)!important;border-color:#ffffff1b!important;color:#fff!important;
+ box-shadow:inset 0 1px #ffffff0b,0 5px 20px #0005;
+}
+.nav button.active:before{content:"";position:absolute;left:0;top:25%;bottom:25%;width:2px;border-radius:4px;background:#fff;box-shadow:0 0 12px #fff;animation:navGlow .5s ease both}
+@keyframes navGlow{from{transform:scaleY(.2);opacity:0}to{transform:scaleY(1);opacity:1}}
+.nav button .ico{transition:transform .35s cubic-bezier(.2,.8,.2,1);color:#ddd}
+.nav button:hover .ico{transform:scale(1.18) rotate(-7deg)}
+.account-btn{border-color:#ffffff18!important;background:linear-gradient(140deg,#151515,#0a0a0a)!important;transition:transform .25s,border-color .3s,box-shadow .3s}
+.account-btn:hover{border-color:#ffffff42!important;box-shadow:0 0 24px #ffffff0c;transform:translateY(-2px)}
+.avatar{background:linear-gradient(145deg,#fff,#858585)!important;color:#050505!important;box-shadow:0 0 18px #ffffff22}
+.status{background:linear-gradient(145deg,#151515,#090909)!important;border-color:#ffffff17!important;box-shadow:inset 0 1px #ffffff08}
+.dot{background:#f5f5f5!important;box-shadow:0 0 10px #fff;animation:dotPulse 2s ease-in-out infinite}
+@keyframes dotPulse{50%{opacity:.45;box-shadow:0 0 18px #fff}}
+.main{padding:clamp(16px,2.2vw,30px)}
+.topbar{position:relative;z-index:1;border-bottom:1px solid #ffffff0c;padding-bottom:18px;margin-bottom:22px}
+.eyebrow{color:#a5a5a5!important;letter-spacing:2px}
+.topbar h2{letter-spacing:-.9px;text-shadow:0 0 30px #ffffff12}
+.chip{background:#111!important;border-color:#ffffff1b!important;color:#c5c5c5!important;transition:all .25s}
+button.chip:hover{border-color:#ffffff55!important;background:#1b1b1b!important;box-shadow:0 0 18px #ffffff0c}
+.hero{background:radial-gradient(ellipse at 85% 0%,#ffffff16,transparent 42%),linear-gradient(125deg,#171717,#0b0b0b 60%,#121212)!important;border-color:#ffffff21!important;box-shadow:inset 0 1px #ffffff0b,0 20px 55px #0007}
+.hero:before{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(115deg,transparent 20%,#ffffff08 48%,transparent 65%);transform:translateX(-100%);animation:heroSweep 11s ease-in-out infinite}
+@keyframes heroSweep{0%,58%{transform:translateX(-100%)}85%,100%{transform:translateX(100%)}}
+.hero:after{color:#ffffff13!important;text-shadow:0 0 40px #fff2;animation:starFloat 6s ease-in-out infinite}
+@keyframes starFloat{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(9px) rotate(12deg)}}
+.hero p{color:#b2b2b2!important}
+.btn,.subject,.quick,.historyitem,.tile,.sidecard,.chatbox,.result,.upload{
+ border-color:#ffffff17!important;
+}
+.btn{transition:transform .25s cubic-bezier(.2,.8,.2,1),background .25s,border-color .25s,box-shadow .25s!important}
+.btn:hover,.quick:hover,.historyitem:hover,.subject:hover{border-color:#ffffff54!important;box-shadow:0 8px 28px #0007,0 0 18px #ffffff09;transform:translateY(-2px)}
+.btn.primary{background:linear-gradient(145deg,#fff,#c9c9c9)!important;color:#080808!important;box-shadow:0 4px 22px #ffffff12!important;position:relative;overflow:hidden}
+.btn.primary:hover{background:#fff!important;box-shadow:0 0 30px #ffffff25!important}
+.btn.primary:before{content:"";position:absolute;inset:0;background:linear-gradient(110deg,transparent 25%,#fff9 50%,transparent 72%);transform:translateX(-130%);transition:transform .7s}
+.btn.primary:hover:before{transform:translateX(130%)}
+.btn.ghost{background:#111!important;color:#e8e8e8!important}
+.grid{gap:14px}
+.tile{background:linear-gradient(145deg,#151515,#0b0b0b)!important;box-shadow:inset 0 1px #ffffff08;position:relative;overflow:hidden;transition:transform .35s cubic-bezier(.2,.8,.2,1),border-color .3s,box-shadow .3s!important}
+.tile:before{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(circle at 15% 0%,#ffffff0c,transparent 60%);opacity:.5;transition:opacity .3s}
+.tile:hover{transform:translateY(-4px)!important;border-color:#ffffff40!important;box-shadow:0 16px 34px #0008,0 0 25px #ffffff08!important}
+.tile:hover:before{opacity:1}
+.tile .tileicon{background:linear-gradient(145deg,#292929,#111)!important;border:1px solid #ffffff12;color:#fff;box-shadow:inset 0 1px #ffffff0c;transition:transform .35s}
+.tile:hover .tileicon{transform:rotate(-5deg) scale(1.06)}
+.sectionhead{border-bottom:1px solid #ffffff0b;padding-bottom:10px}
+.sectionhead h3{letter-spacing:-.2px}
+.subject{background:#111!important;color:#c9c9c9!important}
+.subject.active,.subject:hover{background:#262626!important;color:#fff!important}
+.chatbox{background:linear-gradient(160deg,#0c0c0c,#070707)!important;box-shadow:inset 0 1px #ffffff08,0 15px 45px #0007}
+.chathead{border-color:#ffffff12!important;background:linear-gradient(90deg,#ffffff04,transparent)}
+.messages{scrollbar-color:#444 transparent;scrollbar-width:thin}
+.msg{animation:messageEnter .42s cubic-bezier(.2,.8,.2,1) both}
+@keyframes messageEnter{from{opacity:0;transform:translateY(13px) scale(.985);filter:blur(3px)}to{opacity:1;transform:translateY(0) scale(1);filter:blur(0)}}
+.msg.ai{background:linear-gradient(145deg,#171717,#101010)!important;border-color:#ffffff17!important;box-shadow:inset 0 1px #ffffff08}
+.msg.user{background:linear-gradient(135deg,#f1f1f1,#bcbcbc)!important;color:#080808!important;border-color:#fff!important;box-shadow:0 5px 22px #ffffff0b}
+.msg .who{color:#bdbdbd!important}
+.composer{border-color:#ffffff12!important;background:linear-gradient(0deg,#090909,#090909e8)}
+.composer textarea{background:linear-gradient(145deg,#151515,#0e0e0e)!important;border-color:#ffffff20!important;transition:border-color .25s,box-shadow .25s!important}
+.composer textarea:focus{border-color:#ffffff70!important;box-shadow:0 0 0 4px #ffffff0a,0 0 26px #ffffff0a!important}
+.composer textarea::placeholder{color:#777}
+.attach-btn{background:#141414!important;border-color:#ffffff28!important;color:#eee!important;transition:transform .25s,box-shadow .25s,border-color .25s!important}
+.attach-btn:hover{border-color:#fff8!important;box-shadow:0 0 20px #ffffff12!important;transform:translateY(-2px) rotate(-4deg)!important}
+.attach-btn svg{stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.sidecard,.result,.historyitem,.upload{background:linear-gradient(145deg,#141414,#0b0b0b)!important;box-shadow:inset 0 1px #ffffff08}
+.quick{background:#111!important;color:#e5e5e5!important}
+.field{background:#111!important;border-color:#ffffff20!important}
+.field:focus{border-color:#fff8!important;box-shadow:0 0 0 3px #ffffff0a}
+.view.active{animation:viewCinematic .45s cubic-bezier(.2,.8,.2,1) both}
+@keyframes viewCinematic{from{opacity:0;transform:translateY(12px) scale(.994);filter:blur(2px)}to{opacity:1;transform:none;filter:blur(0)}}
+.modal{background:linear-gradient(145deg,#171717,#090909)!important;border-color:#ffffff25!important;box-shadow:0 30px 100px #000e,0 0 45px #ffffff08}
+.auth-tabs button.active{background:#292929!important}
+.auth-form input{background:#101010!important;border-color:#ffffff22!important}
+.close-btn{background:#141414!important;border-color:#ffffff20!important}
+.toast{background:#151515!important;border-color:#ffffff22!important}
+.particle{background:#fff!important;box-shadow:0 0 8px #ffffff66!important;opacity:.35}
+@keyframes particleDrift{to{transform:translate3d(var(--drift),-110vh,0);opacity:0}}
+@media(max-width:900px){
+ .app{padding:10px;gap:10px;grid-template-columns:205px minmax(0,1fr)}
+ .main{padding:20px}
+ .topbar{align-items:flex-start}
+ .top-actions{flex-wrap:wrap;justify-content:flex-end}
+}
+@media(max-width:700px){
+ .app{display:flex;flex-direction:column;min-height:100dvh;padding:8px;gap:8px}
+ .sidebar{padding:10px 12px;border-radius:19px;gap:10px}
+ .brand{padding:0 2px 10px;gap:10px}
+ .logo{width:38px;height:38px;border-radius:13px}
+ .brand h1{font-size:17px}.brand p{font-size:11px}
+ .nav{display:flex;gap:6px}
+ .nav button{flex:1;justify-content:center;padding:10px 7px;font-size:13px}
+ .nav button .ico{width:auto}
+ .account-btn{width:100%;justify-content:flex-start}
+ .status{display:none}
+ .main{padding:15px;border-radius:19px;flex:1}
+ .topbar{gap:10px;margin-bottom:16px;padding-bottom:13px}
+ .topbar h2{font-size:clamp(21px,6vw,27px)}
+ .eyebrow{font-size:10px;letter-spacing:1.2px}
+ .top-actions{gap:5px}
+ .top-actions .chip{font-size:10px;padding:6px 8px}
+ .chatlayout{grid-template-columns:minmax(0,1fr)!important}
+ .chatbox{min-height:clamp(430px,62dvh,680px)}
+ .messages{padding:13px;max-height:none}
+ .composer{padding:9px;gap:7px}
+ .composer textarea{min-width:0;padding:11px;font-size:16px;min-height:44px}
+ .attach-btn{width:42px;min-width:42px;height:42px;min-height:42px;flex-basis:42px;display:grid;place-items:center;padding:0}
+ .composer .btn.primary{min-width:42px;min-height:42px;padding:9px}
+ .grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .hero{padding:20px}
+}
+@media(max-width:390px){
+ .app{padding:5px}
+ .main{padding:12px}
+ .top-actions .chip:first-child{display:none}
+ .nav button{font-size:12px;gap:5px}
+ .grid{grid-template-columns:minmax(0,1fr)}
+ .chatbox{min-height:420px}
+}
+@media(prefers-reduced-motion:reduce){
+ *,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}
+}
+
+
+@media(min-width:701px) and (max-width:1100px){.nav{display:flex!important;flex-direction:column!important;overflow:visible!important}.nav button{width:100%;justify-content:flex-start}}
+/* === AMIX: нижняя панель вкладок на смартфонах === */
+@media(max-width:700px){
+ .sidebar{background:none!important;border:0!important;box-shadow:none!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;padding:0!important;position:static!important;overflow:visible!important;border-radius:0!important}
+ .sidebar:before,.sidebar:after{display:none!important}
+ .app{padding-bottom:calc(80px + env(safe-area-inset-bottom))!important}
+ .nav{position:fixed!important;left:10px;right:10px;bottom:calc(10px + env(safe-area-inset-bottom));z-index:80;display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr));gap:4px;padding:6px!important;margin:0!important;overflow:visible!important;border-radius:24px;background:rgba(14,14,14,.82);border:1px solid rgba(255,255,255,.12);backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);box-shadow:0 14px 40px rgba(0,0,0,.65);transition:transform .38s cubic-bezier(.2,.8,.2,1),opacity .25s ease;animation:amixNavIn .6s cubic-bezier(.2,.8,.2,1) both}
+ .nav button{flex:none!important;flex-direction:column;justify-content:center;align-items:center;gap:3px!important;min-height:52px;padding:7px 4px!important;font-size:11.5px!important;border-radius:18px;text-align:center}
+ .nav button .ico{width:auto!important;font-size:18px!important;line-height:1}
+ .nav button.active:before{display:none!important}
+ .nav button:after{left:28%!important;right:28%!important;bottom:5px!important}
+ body.kb-open .nav{transform:translateY(140%);opacity:0;pointer-events:none}
+ body.kb-open .app{padding-bottom:8px!important}
+}
+@keyframes amixNavIn{from{transform:translateY(120%);opacity:0}to{transform:none;opacity:1}}
+@media(prefers-reduced-motion:reduce){.nav{animation:none!important}}
+
+/* === AMIX: язык и маленькая кнопка аккаунта === */
+.lang-mini{display:none}
+.langsw{display:flex;gap:6px}
+.langsw .chip{cursor:pointer;min-width:44px;text-align:center}
+.langsw .chip.on{background:#f2f2f2!important;color:#050505!important;border-color:#fff!important}
+#langBtn{cursor:pointer}
+.lang-swap{animation:amixFade .38s cubic-bezier(.2,.8,.2,1)}
+@keyframes amixFade{from{opacity:.15;transform:translateY(5px)}to{opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){.lang-swap{animation:none!important}}
+@media(max-width:700px){
+ .account-btn{position:absolute!important;top:8px;right:8px;width:40px!important;height:40px;min-height:0!important;padding:0!important;border-radius:50%!important;justify-content:center!important;gap:0!important;z-index:30}
+ .account-btn>span:last-child{display:none!important}
+ .account-btn .avatar{width:34px;height:34px}
+ .lang-mini{display:grid;place-items:center;position:absolute;top:8px;right:56px;width:40px;height:40px;border-radius:50%;z-index:30;border:1px solid #ffffff22;background:linear-gradient(140deg,#151515,#0a0a0a);color:#e6e6e6;font-weight:700;font-size:11px;letter-spacing:.5px;font-family:inherit;transition:transform .25s,border-color .3s}
+ .lang-mini:active{transform:scale(.92)}
+ #topAccount,#langBtn{display:none!important}
+ .brand{padding-right:104px!important}
+}
+
+/* === AMIX: чат до нижней панели, подвал внутри настроек === */
+#settings .footer{margin-top:28px;padding-top:12px}
+@media(max-width:700px){
+ body.chat-on .app{height:var(--app-h,100dvh);min-height:0!important}
+ .main{display:flex!important;flex-direction:column;min-height:0}
+ #chat.view.active{display:flex;flex-direction:column;flex:1;min-height:0}
+ #chat .chatlayout{display:flex!important;flex:1;min-height:0}
+ #chat .chatbox{flex:1;min-height:0!important;width:100%}
+ #chat .messages{flex:1;min-height:0!important;max-height:none!important}
+ #settings.view.active{display:flex;flex-direction:column;flex:1}
+ #settings .footer{margin-top:auto;padding-top:28px}
+}
+
+/* === AMIX: аккуратная панель ввода === */
+.composer{align-items:center!important}
+.composer textarea{resize:none!important}
+.send-svg{}
+.composer .btn.primary svg{width:20px;height:20px;display:block;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+@media(max-width:700px){
+ .composer{padding:10px!important;gap:8px!important;flex-wrap:nowrap!important}
+ .composer textarea{flex:1 1 auto!important;flex-basis:auto!important;width:auto!important;min-height:48px!important;height:48px;max-height:120px!important;padding:13px 14px!important;line-height:20px;border-radius:24px!important}
+ .composer .attach-btn,.composer .btn.primary{flex:0 0 48px!important;width:48px!important;min-width:48px!important;height:48px!important;min-height:48px!important;padding:0!important;border-radius:50%!important;display:grid!important;place-items:center}
+ .composer .attach-btn svg{width:21px!important;height:21px!important}
+ .attach-btn:hover{transform:none!important}
+}
+
+/* === AMIX: выдвижное меню (смартфон), новый чат === */
+.new-chat{width:100%;min-height:44px;border-radius:14px;border:1px solid #ffffff2a;background:linear-gradient(145deg,#1b1b1b,#0e0e0e);color:#f1f1f1;font:600 14px/1 inherit;font-family:inherit;cursor:pointer;transition:transform .2s,border-color .25s,box-shadow .25s}
+.new-chat:hover{border-color:#ffffff66;box-shadow:0 0 22px #ffffff12;transform:translateY(-1px)}
+.new-chat:active{transform:scale(.98)}
+#drawerBackdrop,#drawer{display:none}
+.historyitem{cursor:pointer;text-align:left}
+.historyitem.cur{border-color:#ffffff55}
+@media(max-width:700px){
+ .nav,.new-chat{display:none!important}
+ .app{padding-bottom:8px!important}
+ .brand{cursor:pointer;-webkit-tap-highlight-color:transparent}
+ .brand .logo{transition:transform .3s cubic-bezier(.2,.8,.2,1),box-shadow .3s}
+ .brand:active .logo{transform:scale(.9)}
+ #drawerBackdrop{display:block;position:fixed;inset:0;z-index:110;background:rgba(0,0,0,.62);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);opacity:0;pointer-events:none;transition:opacity .35s ease}
+ #drawer{display:flex;flex-direction:column;gap:12px;position:fixed;top:0;bottom:0;left:0;z-index:120;width:min(84vw,330px);padding:calc(16px + env(safe-area-inset-top)) 14px calc(16px + env(safe-area-inset-bottom));background:linear-gradient(170deg,#141414,#080808);border-right:1px solid #ffffff1c;border-radius:0 26px 26px 0;box-shadow:24px 0 70px #000c;transform:translateX(-106%);transition:transform .42s cubic-bezier(.2,.85,.2,1);overflow-y:auto;overscroll-behavior:contain}
+ body.drawer-open #drawerBackdrop{opacity:1;pointer-events:auto}
+ body.drawer-open #drawer{transform:none}
+ body.drawer-open{overflow:hidden}
+ #drawer>*{opacity:0;transform:translateX(-14px);transition:opacity .4s ease,transform .45s cubic-bezier(.2,.8,.2,1)}
+ body.drawer-open #drawer>*{opacity:1;transform:none}
+ body.drawer-open #drawer>*:nth-child(1){transition-delay:.08s}
+ body.drawer-open #drawer>*:nth-child(2){transition-delay:.13s}
+ body.drawer-open #drawer>*:nth-child(3){transition-delay:.18s}
+ body.drawer-open #drawer>*:nth-child(4){transition-delay:.23s}
+ body.drawer-open #drawer>*:nth-child(5){transition-delay:.28s}
+ .dr-head{display:flex;align-items:center;gap:12px;padding:2px 2px 6px}
+ .dr-head .logo{width:38px;height:38px;border-radius:13px;flex:none}
+ .dr-head strong{font-size:18px;flex:1}
+ .dr-close{width:40px;height:40px;border-radius:50%;border:1px solid #ffffff22;background:#111;color:#ddd;font-size:15px;cursor:pointer}
+ .dr-new{min-height:50px;border-radius:16px;border:0;background:linear-gradient(145deg,#fff,#a8a8a8);color:#050505;font:700 15px/1 inherit;font-family:inherit;cursor:pointer;transition:transform .2s}
+ .dr-new:active{transform:scale(.97)}
+ .dr-nav{display:flex;flex-direction:column;gap:4px}
+ .dr-nav button{display:flex;align-items:center;gap:12px;min-height:48px;padding:0 14px;border-radius:14px;border:1px solid transparent;background:transparent;color:#b5b5b5;font:500 15px/1 inherit;font-family:inherit;text-align:left;cursor:pointer;transition:background .2s,color .2s,border-color .2s,transform .15s}
+ .dr-nav button .ico{width:22px;text-align:center;color:#ddd}
+ .dr-nav button.active{background:#1f1f1f;border-color:#ffffff1f;color:#fff}
+ .dr-nav button:active{transform:scale(.98)}
+ .dr-title{margin-top:6px;padding:0 6px;font-size:11px;letter-spacing:1.4px;text-transform:uppercase;color:#7c7c7c}
+ .dr-chats{display:flex;flex-direction:column;gap:4px;min-height:0}
+ .dr-chat{min-height:44px;padding:10px 14px;border-radius:14px;border:1px solid transparent;background:transparent;color:#c8c8c8;font:400 14px/1.3 inherit;font-family:inherit;text-align:left;cursor:pointer;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;transition:background .2s,border-color .2s}
+ .dr-chat:hover,.dr-chat.cur{background:#181818;border-color:#ffffff1a;color:#fff}
+ .dr-empty{padding:6px;color:#6f6f6f;font-size:13px}
+}
+@media(prefers-reduced-motion:reduce){#drawer,#drawerBackdrop,#drawer>*{transition:none!important}}
+
+/* === AMIX: низ меню (конфиденциальность, вход/выход) === */
+.priv-list{margin:6px 0 0;padding:0;list-style:none;display:grid;gap:10px}
+.priv-list li{position:relative;padding:12px 14px 12px 34px;border:1px solid #ffffff14;border-radius:14px;background:#ffffff06;color:#d2d2d2;font-size:14px;line-height:1.45}
+.priv-list li:before{content:"";position:absolute;left:14px;top:19px;width:7px;height:7px;border-radius:50%;background:#fff;box-shadow:0 0 10px #fff8}
+@media(max-width:700px){
+ .dr-chats{flex:1 1 auto;overflow-y:auto}
+ .dr-bottom{margin-top:auto;display:flex;flex-direction:column;gap:8px;padding-top:12px;border-top:1px solid #ffffff14}
+ .dr-priv{min-height:42px;border:0;background:transparent;color:#9a9a9a;font:500 14px/1 inherit;font-family:inherit;text-align:left;padding:0 14px;border-radius:12px;cursor:pointer;transition:color .2s,background .2s}
+ .dr-priv:hover,.dr-priv:active{color:#fff;background:#161616}
+ .dr-auth{min-height:48px;border-radius:14px;border:1px solid #ffffff33;background:linear-gradient(145deg,#1b1b1b,#0e0e0e);color:#f1f1f1;font:600 15px/1 inherit;font-family:inherit;cursor:pointer;transition:transform .2s,border-color .25s}
+ .dr-auth:active{transform:scale(.97)}
+ .dr-auth.out{color:#ffb4b4;border-color:#ff8a8a40}
+ body.drawer-open #drawer>*:nth-child(6){transition-delay:.33s}
+}
+@media(min-width:701px){.dr-bottom{display:none}}
+
+/* Fix modal layering so auth controls stay clickable above mobile navigation. */
+#authBackdrop{z-index:1200!important}
+#privBackdrop{z-index:1150!important}
+#amixPaywall{z-index:1100!important}
+.toast{z-index:1300!important}
+.modal,.modal button,.auth-form,.auth-form button,.auth-tabs button{pointer-events:auto!important}
+
+#prompt:disabled{opacity:.55;cursor:not-allowed}
+#chatForm button:disabled{opacity:.4;cursor:not-allowed;filter:grayscale(1)}
+
+/* Guest ghost: keep the icon, remove the round badge behind it. */
+.avatar.guest-avatar{
+ background:transparent!important;
+ border:0!important;
+ color:#f5f5f5!important;
+ box-shadow:none!important;
+ overflow:visible;
+}
+.avatar.guest-avatar svg{
+ width:25px;height:25px;display:block;
+ filter:drop-shadow(0 1px 4px #ffffff20);
+ transition:transform .25s ease;
+}
+.account-btn:hover .avatar.guest-avatar svg{transform:translateY(-2px) rotate(-5deg)}
+.account-btn.is-guest{background:transparent!important;border-color:transparent!important;box-shadow:none!important}
+@media(max-width:700px){.account-btn.is-guest{background:transparent!important;border:0!important;box-shadow:none!important}.account-btn.is-guest .avatar.guest-avatar{background:transparent!important;border:0!important;box-shadow:none!important}}
+
+
+/* Amix Black Hole: animated accretion disk sits behind the translucent interface. */
+#blackHoleCanvas{position:fixed;inset:0;width:100vw;height:100vh;display:block;z-index:0;pointer-events:none;opacity:.96;mix-blend-mode:screen}
+.app{position:relative;z-index:2}
+.particle-layer{z-index:1}
+.sidebar,.main{background:rgba(8,8,8,.78)!important;border-color:rgba(255,255,255,.10)!important;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.main{background:radial-gradient(ellipse at 55% 28%,rgba(20,20,20,.72),rgba(8,8,8,.78) 72%)!important}
+.chatbox{background:rgba(5,5,5,.66)!important}
+.chathead,.composer{background:rgba(10,10,10,.76)!important}
+.messages{background:rgba(0,0,0,.10)}
+.hero{background:linear-gradient(125deg,rgba(24,24,24,.83),rgba(10,10,10,.74))!important}
+.tile,.historyitem,.status,.sidecard{background:rgba(12,12,12,.78)!important}
+.view.dust-out{animation:blackHoleCollapse .56s cubic-bezier(.45,0,.95,.45) both!important;transform-origin:72% 48%;filter:blur(0)}
+@keyframes blackHoleCollapse{0%{opacity:1;transform:scale(1) rotate(0deg);filter:blur(0)}35%{opacity:.93;transform:scale(.985) rotate(-.4deg);filter:blur(.5px)}72%{opacity:.54;transform:scale(.91) rotate(1.1deg);filter:blur(3px)}100%{opacity:0;transform:scale(.78) rotate(3deg);filter:blur(10px)}}
+@media(max-width:700px){.view.dust-out{transform-origin:78% 40%}.sidebar,.main{background:rgba(8,8,8,.76)!important}}
+@media(prefers-reduced-motion:reduce){#blackHoleCanvas{opacity:.74}.view.dust-out{animation:none!important}}
+
+
+/* Immersive Voice AI preview — the logo remains reachable above the event horizon. */
+.soon-mini{margin-left:auto;padding:2px 7px;border:1px solid #ffffff1c;border-radius:99px;color:#8c8c8c;font-size:10px;line-height:1.5;white-space:nowrap}
+.voice-stage{position:relative;min-height:calc(100dvh - 180px);overflow:hidden;isolation:isolate;text-align:center;align-items:center;justify-items:center;gap:18px;padding:34px 20px 22px}
+.voice-stage.active{display:grid;grid-template-rows:1fr auto 1fr;align-content:stretch}
+.voice-top{position:relative;z-index:5;max-width:620px;align-self:center;padding:14px 18px;animation:voiceTextReveal .8s .15s both}
+.voice-badge{display:inline-flex;align-items:center;gap:8px;padding:7px 12px;border:1px solid #ffffff22;border-radius:999px;background:#05050572;color:#ddd;font-size:10px;letter-spacing:1.6px;font-weight:700;backdrop-filter:blur(12px)}
+.voice-badge-dot{width:6px;height:6px;border-radius:50%;background:#ff9a62;box-shadow:0 0 13px #ff874d;animation:voiceDotPulse 1.8s infinite}
+.voice-overline{margin:18px 0 4px;font-size:11px;letter-spacing:4px;color:#ffbd91;text-shadow:0 0 20px #ff884a80}
+.voice-top h2{margin:0;font-size:clamp(34px,6vw,64px);letter-spacing:-2px;line-height:1.02;text-shadow:0 6px 30px #000,0 0 40px #ffb47b30}
+.voice-top p{max-width:480px;margin:14px auto 0;color:#d0d0d0;font-size:clamp(13px,1.7vw,16px);text-shadow:0 2px 15px #000;line-height:1.65}
+.voice-center-ui{position:absolute;width:min(74vw,680px);aspect-ratio:1;left:50%;top:50%;transform:translate(-50%,-50%);z-index:2;pointer-events:none;opacity:.76}
+.voice-orbit{position:absolute;left:50%;top:50%;border:1px solid #ffccaa20;border-radius:50%;transform:translate(-50%,-50%) rotate(-23deg);box-shadow:0 0 25px #ff894512,inset 0 0 25px #ff894510}
+.orbit-a{width:94%;height:48%;animation:voiceOrbit 19s linear infinite}
+.orbit-b{width:75%;height:37%;border-color:#ffc28f35;animation:voiceOrbit 13s linear infinite reverse}
+.orbit-c{width:112%;height:57%;border-color:#8e9dff23;animation:voiceOrbit 28s linear infinite}
+.voice-center-mark{position:absolute;left:50%;top:50%;width:12%;aspect-ratio:1;display:grid;place-items:center;transform:translate(-50%,-50%);font-size:clamp(8px,.9vw,12px);letter-spacing:2px;font-weight:900;color:#fff2e4;text-shadow:0 0 12px #ffad75,0 0 26px #ff7e4c;opacity:.45}
+.voice-center-mark i{position:absolute;width:260%;height:260%;border:1px solid #ffe1c622;border-radius:50%;animation:voiceCorePulse 3.5s ease-in-out infinite}
+.voice-bottom{position:relative;z-index:5;align-self:end;width:min(100%,570px);padding:16px 18px 18px;border:1px solid #ffffff18;border-radius:24px;background:linear-gradient(145deg,#101010ba,#0505058f);box-shadow:0 15px 70px #0009;backdrop-filter:blur(16px);animation:voiceTextReveal .9s .25s both}
+.voice-statusline{display:flex;align-items:center;justify-content:center;gap:9px;min-height:24px;color:#c7c7c7;font-size:12px;margin-bottom:13px}
+.voice-status-dot{width:7px;height:7px;flex:none;background:#777;border-radius:50%;box-shadow:0 0 0 4px #ffffff0a}
+.voice-status-dot.active{background:#ffac7b;box-shadow:0 0 15px #ff874d,0 0 0 5px #ff9e4a15;animation:voiceDotPulse .8s infinite}
+.voice-controls{display:flex;justify-content:center;flex-wrap:wrap;gap:10px}
+.voice-mic-btn,.voice-return-btn{min-height:46px;border-radius:14px;padding:11px 17px;font-weight:700;border:1px solid #ffffff20;background:#111;color:#fff;transition:transform .2s,border-color .2s,background .2s,box-shadow .2s}
+.voice-mic-btn{background:linear-gradient(120deg,#fff1e5,#ffb07a);color:#150b06;border:0;box-shadow:0 5px 28px #ff874a35}
+.voice-mic-btn:hover{box-shadow:0 7px 36px #ff874a65;transform:translateY(-1px)}
+.voice-return-btn:hover{border-color:#ffffff58;background:#1c1c1c}
+.voice-return-btn span:first-child{margin-right:5px}
+.voice-disclaimer{margin:12px auto 0;max-width:480px;color:#858585;font-size:11px;line-height:1.5}
+@keyframes voiceTextReveal{from{opacity:0;transform:translateY(14px);filter:blur(8px)}to{opacity:1;transform:translateY(0);filter:blur(0)}}
+@keyframes voiceDotPulse{0%,100%{opacity:.62;transform:scale(.9)}50%{opacity:1;transform:scale(1.18)}}
+@keyframes voiceOrbit{from{transform:translate(-50%,-50%) rotate(0)}to{transform:translate(-50%,-50%) rotate(360deg)}}
+@keyframes voiceCorePulse{0%,100%{transform:scale(.82);opacity:.25}50%{transform:scale(1.18);opacity:.8}}
+body.voice-mode{background:#000!important;overflow:hidden!important}
+body.voice-mode #blackHoleCanvas{z-index:1;opacity:1;mix-blend-mode:screen}
+body.voice-mode .app{position:fixed;inset:0;max-width:none;width:100vw;height:100dvh;min-height:100dvh;padding:0!important;margin:0;display:block;z-index:3;pointer-events:none}
+body.voice-mode .sidebar{position:fixed;top:calc(13px + env(safe-area-inset-top));left:calc(13px + env(safe-area-inset-left));z-index:125;width:auto;padding:0!important;margin:0;display:block;gap:0;background:transparent!important;border:0!important;border-radius:0!important;box-shadow:none!important;pointer-events:none}
+body.voice-mode .sidebar>:not(.brand){display:none!important}
+body.voice-mode .brand{display:flex;pointer-events:auto;cursor:pointer;gap:10px;padding:5px 10px 5px 5px!important;border:1px solid #ffffff16!important;border-radius:17px;background:#05050559!important;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);box-shadow:0 7px 35px #0008;min-height:52px}
+body.voice-mode .brand .logo{flex:none;width:40px;height:40px;border-radius:13px}
+body.voice-mode .brand h1{font-size:17px;text-shadow:0 2px 14px #000}
+body.voice-mode .brand p{display:none!important}
+body.voice-mode .main{position:fixed;inset:0;width:100vw;height:100dvh;min-height:100dvh;margin:0;padding:0!important;overflow:hidden;border:0!important;border-radius:0!important;background:transparent!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;box-shadow:none!important;pointer-events:none;z-index:4}
+body.voice-mode .main>.topbar{display:none!important}
+body.voice-mode .view{pointer-events:none}
+body.voice-mode .view.voice-stage.active{position:fixed;inset:0;width:100vw;height:100dvh;min-height:100dvh;padding:calc(78px + env(safe-area-inset-top)) 18px calc(22px + env(safe-area-inset-bottom));display:flex;flex-direction:column;justify-content:space-between;align-items:center;gap:12px;background:transparent!important;pointer-events:none;animation:voiceStageReveal 1.05s cubic-bezier(.15,.8,.18,1) both}
+body.voice-mode #voice .voice-top,body.voice-mode #voice .voice-bottom{pointer-events:auto}
+body.voice-mode .voice-top{align-self:center;padding:10px 13px;max-width:min(700px,100%)}
+body.voice-mode .voice-bottom{align-self:center;margin-bottom:0;max-width:600px}
+body.voice-mode #drawerBackdrop{display:block;position:fixed;inset:0;z-index:110;background:rgba(0,0,0,.66);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);opacity:0;pointer-events:none;transition:opacity .35s ease}
+body.voice-mode #drawer{display:flex;flex-direction:column;gap:12px;position:fixed;top:0;bottom:0;left:0;z-index:120;width:min(84vw,340px);padding:calc(16px + env(safe-area-inset-top)) 14px calc(16px + env(safe-area-inset-bottom));background:linear-gradient(170deg,#151515,#070707);border-right:1px solid #ffffff1c;border-radius:0 24px 24px 0;box-shadow:24px 0 70px #000c;transform:translateX(-106%);transition:transform .42s cubic-bezier(.2,.85,.2,1);overflow-y:auto;overscroll-behavior:contain;pointer-events:auto}
+body.voice-mode.drawer-open #drawerBackdrop{opacity:1;pointer-events:auto}
+body.voice-mode.drawer-open #drawer{transform:none}
+body.voice-mode #drawer .dr-head{display:flex;align-items:center;gap:12px;padding:2px 2px 6px}
+body.voice-mode #drawer .dr-head .logo{width:38px;height:38px;border-radius:13px;flex:none}
+body.voice-mode #drawer .dr-head strong{font-size:18px;flex:1}
+body.voice-mode #drawer .dr-close{width:40px;height:40px;border-radius:50%;border:1px solid #ffffff22;background:#111;color:#ddd;font-size:15px}
+body.voice-mode #drawer .dr-new{min-height:48px;border-radius:15px;border:0;background:linear-gradient(145deg,#fff,#aaa);color:#050505;font-weight:700}
+body.voice-mode #drawer .dr-nav{display:flex;flex-direction:column;gap:4px}
+body.voice-mode #drawer .dr-nav button{display:flex;align-items:center;gap:12px;min-height:48px;padding:0 14px;border-radius:14px;border:1px solid transparent;background:transparent;color:#b5b5b5;text-align:left;cursor:pointer}
+body.voice-mode #drawer .dr-nav button .ico{width:22px;text-align:center;color:#ddd}
+body.voice-mode #drawer .dr-nav button.active{background:#ffffff12;border-color:#ffffff1f;color:#fff}
+body.voice-mode #drawer .dr-title{margin-top:6px;padding:0 6px;font-size:11px;letter-spacing:1.4px;text-transform:uppercase;color:#7c7c7c}
+body.voice-mode #drawer .dr-chats{display:flex;flex-direction:column;gap:4px;min-height:0;overflow-y:auto}
+body.voice-mode #drawer .dr-chat{min-height:44px;padding:10px 14px;border-radius:14px;border:1px solid transparent;background:transparent;color:#c8c8c8;text-align:left;cursor:pointer}
+body.voice-mode #drawer .dr-chat:hover,body.voice-mode #drawer .dr-chat.cur{background:#181818;border-color:#ffffff1a;color:#fff}
+body.voice-mode #drawer .dr-bottom{margin-top:auto;display:flex;flex-direction:column;gap:8px;padding-top:12px;border-top:1px solid #ffffff14}
+body.voice-mode #drawer .dr-priv,body.voice-mode #drawer .dr-auth{min-height:43px;border-radius:12px;padding:0 14px;text-align:left;background:#111;color:#ddd;border:1px solid #ffffff19}
+@keyframes voiceStageReveal{0%{opacity:0;transform:scale(.92);filter:blur(12px)}55%{opacity:1;transform:scale(1.012);filter:blur(0)}100%{opacity:1;transform:scale(1);filter:blur(0)}}
+@media(max-width:700px){
+ .voice-stage{min-height:calc(100dvh - 120px);padding:22px 12px}
+ .voice-top h2{font-size:clamp(34px,10vw,48px);letter-spacing:-1.2px}
+ .voice-badge{font-size:9px;letter-spacing:1px;padding:7px 10px}
+ .voice-center-ui{width:95vw;opacity:.55}
+ .voice-bottom{padding:13px 11px 14px;border-radius:19px;width:100%}
+ .voice-controls{gap:8px}
+ .voice-mic-btn,.voice-return-btn{min-height:43px;padding:10px 12px;font-size:12px}
+ body.voice-mode .voice-top{padding:8px 5px}
+ body.voice-mode .voice-top p{max-width:350px}
+ body.voice-mode .voice-bottom{width:min(100%,520px);padding:13px 11px}
+ body.voice-mode #drawer{width:min(86vw,330px)}
+}
+@media(prefers-reduced-motion:reduce){.voice-orbit,.voice-center-mark i,.voice-badge-dot,.voice-status-dot.active{animation:none!important}body.voice-mode .view.voice-stage.active{animation:none!important}}
+
+
+/* === AMIX: iPhone drawer, чёрная дыра, правовые документы === */
+.brand{touch-action:manipulation;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+@media(max-width:700px){#drawerBackdrop{top:0;right:0;bottom:0;left:0;width:100%;height:100%}}
+body.voice-mode #drawerBackdrop{top:0;right:0;bottom:0;left:0;width:100%;height:100%}
+#privBackdrop{z-index:1250!important}
+#privBackdrop .modal{width:min(100%,720px)}
+.legal-modal{display:flex;flex-direction:column;overflow:hidden;max-height:calc(100dvh - 24px)}
+.legal-tabs{display:flex;gap:6px;padding:5px;margin-bottom:14px;background:#0b0b0b;border:1px solid #303030;border-radius:13px;overflow-x:auto;flex:none}
+.legal-tabs button{flex:1;border:0;border-radius:9px;padding:9px 12px;min-height:40px;background:transparent;color:#999;white-space:nowrap}
+.legal-tabs button.active{background:#292929;color:#fff}
+.legal{flex:1;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;padding-right:4px;font-size:13.5px;line-height:1.6;color:#d0d0d0}
+.legal h4{margin:18px 0 6px;font-size:15px;color:#fff}.legal h4:first-child{margin-top:0}
+.legal p{margin:0 0 9px}.legal ul{margin:0 0 9px;padding-left:20px}.legal li{margin:3px 0}
+.legal .meta{color:#8a8a8a;font-size:12px}
+.legal a{color:#fff;text-decoration:underline}
+mark.ph{background:#3a3217;color:#ffd978;border-radius:4px;padding:0 4px}
+.legalsw{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+.legalsw .chip{cursor:pointer}
+.auth-form label.consent{display:flex;gap:10px;align-items:flex-start;font-size:12px;line-height:1.45;color:#b5b5b5;cursor:pointer}
+.auth-form label.consent input{width:18px;height:18px;min-width:18px;margin-top:1px;padding:0;accent-color:#fff}
+.auth-form label.consent a{color:#fff;text-decoration:underline}
+.ai-hint{margin:0;padding:0 14px 10px;font-size:11px;line-height:1.4;color:#777;text-align:center}
+#storageNotice{position:fixed;left:50%;bottom:max(14px,env(safe-area-inset-bottom));transform:translateX(-50%);width:min(calc(100% - 20px),580px);z-index:900;display:none;flex-wrap:wrap;gap:10px;align-items:center;padding:12px 14px;border:1px solid #ffffff22;border-radius:16px;background:rgba(14,14,14,.95);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);font-size:12px;line-height:1.45;color:#ccc;box-shadow:0 14px 40px #000a}
+#storageNotice.show{display:flex}
+#storageNotice span{flex:1 1 240px}
+#storageNotice .chip{cursor:pointer;min-height:36px}
+body.voice-mode #storageNotice{display:none!important}
+
+/* WebLLM model banner */
+.model-banner{margin:0 0 12px;padding:14px 16px;border:1px solid #ffffff22;border-radius:16px;background:linear-gradient(145deg,#151515,#0c0c0c);display:none}
+.model-banner.show{display:block}
+.model-banner h4{margin:0 0 6px;font-size:14px}
+.model-banner p{margin:0 0 12px;font-size:12px;color:#999;line-height:1.45}
+.model-progress{height:8px;border-radius:99px;background:#222;overflow:hidden;margin:0 0 8px}
+.model-progress>i{display:block;height:100%;width:0%;background:linear-gradient(90deg,#fff,#aaa);border-radius:99px;transition:width .25s}
+.model-pct{font-size:11px;color:#aaa;margin-bottom:10px}
+.model-banner .btn{width:100%}
+.msg.streaming .who:after{content:" · …";opacity:.5}
+
+</style>
+</head>
+<body>
+<canvas id="blackHoleCanvas" aria-hidden="true"></canvas>
+<div class="particle-layer" aria-hidden="true" id="particleLayer"></div>
+<div id="snapFx" aria-hidden="true"><div class="dust-cloud" id="dustCloud"></div></div>
+<div class="app">
+<aside class="sidebar">
+  <div class="brand" id="brandBtn" role="button" tabindex="0" aria-label="Menu" data-i18n-attr="aria-label:menu"><div class="logo">◈</div><div><h1>Amix</h1><p data-i18n="tagline">Твой офлайн ИИ-репетитор</p></div></div>
+  <button class="new-chat" type="button" onclick="newChat()" data-i18n="new_chat">Новый чат</button>
+  <nav class="nav">
+    <button class="active" data-view="chat"><span class="ico">✧</span><span data-i18n="nav_chat">Чат</span></button>
+    <button data-view="history"><span class="ico">◷</span><span data-i18n="nav_history">История</span></button>
+    <button data-view="settings"><span class="ico">⚙</span><span data-i18n="nav_settings">Настройки</span></button>
+    <button data-view="pro"><span class="ico">✦</span><span data-i18n="nav_pro">Amix Pro</span></button>
+    <button data-view="voice"><span class="ico">◉</span><span data-i18n="nav_voice">Голосовой ИИ</span><span class="soon-mini" data-i18n="voice_soon_short">Скоро</span></button>
+  </nav>
+  <button class="account-btn" id="accountButton" onclick="openAuth()"><span class="avatar" id="avatarLetter">Г</span><span><strong id="accountName">Гость</strong><small id="accountSub">Войти или создать аккаунт</small></span></button>
+  <button class="lang-mini" id="langMini" type="button" onclick="toggleLang()" aria-label="Language">RU</button>
+  <div class="status"><strong><span class="dot"></span><span data-i18n="status_t">Офлайн-режим</span></strong><small data-i18n="status_s">Интерфейс доступен без интернета</small></div>
+</aside>
+<main class="main">
+  <div class="topbar"><div><div class="eyebrow" data-i18n="eyebrow">Личный учебный помощник</div><h2 id="pageTitle">Привет! Что изучаем?</h2></div><div class="top-actions"><span class="chip" data-i18n="chip_local">● Локальный режим</span><button class="chip" onclick="openAuth()" id="topAccount">♙ Аккаунт</button><button class="chip" id="langBtn" type="button" onclick="toggleLang()" aria-label="Language">RU</button></div></div>
+
+  <section class="view active" id="chat">
+    <div class="chatlayout" style="grid-template-columns:minmax(0,1fr)"><div class="chatbox">
+      <div class="chathead"><strong data-i18n="chat_title">✧ Учебный чат</strong><span class="chip" data-i18n="chat_chip">Офлайн-режим</span></div>
+      
+      <div class="model-banner" id="modelBanner">
+        <h4 data-i18n="model_title">Локальный ИИ</h4>
+        <p data-i18n="model_desc">Скачай модель один раз — дальше ответы работают без интернета, сообщения не уходят с устройства.</p>
+        <div class="model-progress" id="modelProgress" style="display:none"><i id="modelBar"></i></div>
+        <div class="model-pct" id="modelPct" style="display:none"></div>
+        <button class="btn primary" type="button" id="modelDownloadBtn" data-i18n="model_download">Скачать ИИ-модель</button>
+      </div>
+
+      <div class="messages" id="messages"><div class="msg ai"><div class="who">AMIX</div><span data-i18n="welcome">Привет! Напиши, что нужно решить или объяснить, Я помогу решить задачу или объяснить тему по твоему сообщению.</span></div></div>
+      <div id="chatAttachment" class="muted" style="display:none;margin:10px 0"></div><form class="composer" id="chatForm"><textarea id="prompt" placeholder="Напиши сообщение…" data-i18n-attr="placeholder:placeholder"></textarea><button class="btn primary" type="submit" aria-label="Отправить" data-i18n-attr="aria-label:send"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button></form><p class="ai-hint" data-i18n="ai_hint"></p>
+    </div></div>
+  </section>
+
+  <section class="view voice-stage" id="voice" aria-labelledby="voiceTitle">
+    <div class="voice-top">
+      <div class="voice-badge"><span class="voice-badge-dot"></span><span data-i18n="voice_badge">ПРЕВЬЮ · БУДУЩЕЕ ОБНОВЛЕНИЕ</span></div>
+      <div class="voice-overline" data-i18n="voice_overline">AMIX VOICE EXPERIENCE</div>
+      <h2 id="voiceTitle" data-i18n="voice_title">Голосовой ИИ</h2>
+      <p data-i18n="voice_description">Скоро ты сможешь разговаривать с Amix голосом. Посмотри, что тебя ждёт.</p>
+    </div>
+    <div class="voice-center-ui" aria-hidden="true">
+      <div class="voice-orbit orbit-a"></div><div class="voice-orbit orbit-b"></div><div class="voice-orbit orbit-c"></div>
+      <div class="voice-center-mark"><span>AMIX</span><i></i></div>
+    </div>
+    <div class="voice-bottom">
+      <div class="voice-statusline"><span class="voice-status-dot" id="voiceStatusDot"></span><span id="voiceStatus" data-i18n="voice_status_idle">Голосовой режим пока не подключён</span></div>
+      <div class="voice-controls">
+        <button class="voice-mic-btn" id="voiceMicBtn" type="button" onclick="toggleVoiceMic()" data-i18n="voice_mic_start">Включить реакцию на голос</button>
+        <button class="voice-return-btn" type="button" onclick="showView('chat')"><span>←</span> <span data-i18n="voice_back_chat">Вернуться в чат</span></button>
+      </div>
+      <p class="voice-disclaimer" data-i18n="voice_note">Микрофон меняет только визуальный эффект и ничего не отправляет. Сам голосовой ИИ появится в будущем обновлении.</p>
+    </div>
+  </section>
+
+  <section class="view" id="pro">
+  <div class="hero">
+    <div class="eyebrow" data-i18n="pro_eyebrow">AMIX MEMBERSHIP</div>
+    <h3>Amix Pro</h3>
+    <p data-i18n="pro_description">Продолжай пользоваться Amix без ограничений после бесплатного пробного периода.</p>
+    <div style="font-size:38px;font-weight:800;letter-spacing:-1px;margin:10px 0 16px">200 ₽ <span data-i18n="pro_month" style="font-size:14px;font-weight:500;color:#aaa;letter-spacing:0">/ месяц</span></div>
+    <button class="btn primary" type="button" onclick="buyAmixPro()" data-i18n="buy_pro">Купить Pro-версию</button>
+  </div>
+  <div class="tile" style="min-height:0">
+    <div class="tileicon">✦</div><strong data-i18n="trial_title">7 дней бесплатно</strong>
+    <small data-i18n="trial_description">После регистрации доступен пробный период на 7 дней. По его окончании потребуется Amix Pro.</small>
+  </div>
+  <p class="muted" data-i18n="pro_payment_notice" style="font-size:12px;margin-top:16px">Оплата в этом HTML-прототипе не подключена. Кнопка покупки демонстрационная; для настоящих платежей нужен платёжный сервис и серверная проверка доступа.</p>
+</section>
+
+<section class="view" id="history"><div class="sectionhead"><h3 data-i18n="hist_h">Недавние чаты</h3><button class="btn ghost" onclick="clearHistory()" data-i18n="hist_clear">Очистить</button></div><div id="historyList"><p class="muted">Пока заданий нет. Решённые примеры появятся здесь на время текущего сеанса.</p></div></section>
+  <section class="view" id="settings"><div class="hero"><h3 data-i18n="set_h">Настройки приложения</h3><p data-i18n="set_p">Прототип сохраняет настройки и историю только до закрытия страницы.</p></div><div class="settingsrow"><div><strong data-i18n="set_theme">Тема оформления</strong><div class="muted" data-i18n="set_theme_d">Тёмная монохромная</div></div><span class="chip">Dark</span></div><div class="settingsrow"><div><strong data-i18n="set_mode">Режим работы</strong><div class="muted" data-i18n="set_mode_d">Весь интерфейс доступен без интернета</div></div><span class="chip"><span class="dot"></span><span data-i18n="set_mode_chip">Офлайн</span></span></div><div class="settingsrow"><div><strong data-i18n="set_lang">Язык</strong><div class="muted" data-i18n="set_lang_d">Язык интерфейса и ответов</div></div><span class="langsw"><button type="button" class="chip" data-lang="ru" onclick="setLang('ru')">RU</button><button type="button" class="chip" data-lang="en" onclick="setLang('en')">EN</button></span></div><div class="settingsrow"><div><strong data-i18n="set_legal">Правовая информация</strong><div class="muted" data-i18n="set_legal_d">Документы по законодательству РФ</div></div><span class="legalsw"><button type="button" class="chip" onclick="openLegal('policy')" data-i18n="lg_policy">Политика</button><button type="button" class="chip" onclick="openLegal('terms')" data-i18n="lg_terms">Соглашение</button><button type="button" class="chip" onclick="openLegal('offer')" data-i18n="lg_offer">Оферта Pro</button></span></div><div class="settingsrow"><div><strong data-i18n="set_wipe">Данные на этом устройстве</strong><div class="muted" data-i18n="set_wipe_d">Удалить чаты, профиль и сохранённые настройки</div></div><button type="button" class="chip" onclick="wipeLocalData()" data-i18n="set_wipe_btn">Удалить</button></div><div class="footer" data-i18n="footer">AMIX · ОФЛАЙН-ПРОТОТИП · Один HTML-файл</div></section>
+</main></div>
+
+<div class="modal-backdrop" id="authBackdrop" role="dialog" aria-modal="true" aria-labelledby="authTitle" onclick="backdropClose(event)">
+  <div class="modal">
+    <div class="modal-top"><div><div class="eyebrow" data-i18n="auth_eyebrow">ТВОЙ УЧЕБНЫЙ ПРОФИЛЬ</div><h3 id="authTitle">Добро пожаловать</h3></div><button class="close-btn" onclick="closeAuth()" aria-label="Закрыть" data-i18n-attr="aria-label:close">✕</button></div>
+    <div class="auth-tabs"><button type="button" class="active" id="loginTab" onclick="setAuthMode('login')" data-i18n="tab_login">Войти</button><button type="button" id="signupTab" onclick="setAuthMode('signup')" data-i18n="tab_signup">Создать аккаунт</button></div>
+    <form class="auth-form" id="authForm" novalidate>
+      <label id="nameField" style="display:none"><span data-i18n="lbl_name">Как тебя зовут?</span><input id="authName" autocomplete="name" placeholder="Имя или никнейм" data-i18n-attr="placeholder:ph_name"></label>
+      <label><span data-i18n="lbl_email">Электронная почта</span><input id="authEmail" type="email" autocomplete="email" placeholder="you@example.com" required></label>
+      <label><span data-i18n="lbl_pass">Пароль</span><input id="authPassword" type="password" autocomplete="current-password" minlength="4" placeholder="Не менее 4 символов" data-i18n-attr="placeholder:ph_pass" required></label>
+      <button class="btn primary" id="authSubmit" type="submit">Войти</button>
+    </form>
+    <p class="auth-note" id="authNote">Демо-аккаунт хранится только в памяти этой страницы. Это не настоящая регистрация и данные не отправляются на сервер.</p>
+  </div>
+</div>
+<div class="toast" id="toast" role="status"></div>
+<div class="modal-backdrop" id="privBackdrop" role="dialog" aria-modal="true" aria-labelledby="privTitle" style="z-index:140">
+  <div class="modal legal-modal">
+    <div class="modal-top"><div><div class="eyebrow">AMIX · <span data-i18n="legal_eyebrow">ПРАВОВАЯ ИНФОРМАЦИЯ</span></div><h3 id="privTitle">Конфиденциальность</h3></div><button class="close-btn" type="button" id="privClose" aria-label="Close" data-i18n-attr="aria-label:close">✕</button></div>
+    <div class="legal-tabs" id="legalTabs"><button type="button" class="active" data-doc="policy" data-i18n="lg_policy">Политика</button><button type="button" data-doc="terms" data-i18n="lg_terms">Соглашение</button><button type="button" data-doc="offer" data-i18n="lg_offer">Оферта Pro</button></div>
+    <div class="legal" id="legalBody"></div>
+  </div>
+</div>
+
+<div id="drawerBackdrop" aria-hidden="true"></div>
+<aside id="drawer" aria-hidden="true" aria-label="Menu" data-i18n-attr="aria-label:menu">
+  <div class="dr-head"><div class="logo">◈</div><strong>Amix</strong><button class="dr-close" type="button" id="drawerClose" aria-label="Close" data-i18n-attr="aria-label:close">✕</button></div>
+  <button class="dr-new" type="button" onclick="newChat()" data-i18n="new_chat">Новый чат</button>
+  <nav class="dr-nav">
+    <button data-view="chat" class="active"><span class="ico">✧</span><span data-i18n="nav_chat">Чат</span></button>
+    <button data-view="voice"><span class="ico">◉</span><span data-i18n="nav_voice">Голосовой ИИ</span><span class="soon-mini" data-i18n="voice_soon_short">Скоро</span></button>
+    <button data-view="history"><span class="ico">◷</span><span data-i18n="nav_history">История</span></button>
+    <button data-view="settings"><span class="ico">⚙</span><span data-i18n="nav_settings">Настройки</span></button>
+    <button data-view="pro"><span class="ico">✦</span><span data-i18n="nav_pro">Amix Pro</span></button>
+  </nav>
+  <div class="dr-title" data-i18n="recent_chats">Недавние чаты</div>
+  <div class="dr-chats" id="drawerChats"></div>
+  <div class="dr-bottom">
+    <button class="dr-priv" type="button" id="privBtn" data-i18n="privacy">Конфиденциальность</button>
+    <button class="dr-auth" type="button" id="drAuth" data-i18n="login">Войти</button>
+  </div>
+</aside>
+
+<script>
+const titles={chat:'Просто напиши, что нужно',history:'История заданий',settings:'Настройки',voice:'Голосовой ИИ'};
+let historyItems=[];
+let snapBusy=false;
+function makeDustForView(view,mode){
+ const cloud=document.getElementById('dustCloud');cloud.innerHTML='';
+ const rect=view.getBoundingClientRect();
+ const left=Math.max(0,rect.left);
+ const top=Math.max(0,rect.top);
+ const width=Math.max(1,Math.min(window.innerWidth-left,rect.width||window.innerWidth));
+ const height=Math.max(1,Math.min(window.innerHeight-top,rect.height||window.innerHeight));
+ const count=Math.min(240,Math.max(100,Math.round(width*height/5200)));
+ const colors=['#f7f7f7','#b7bdc7','#f0bb83','#f3e4d2','#ffffff','#d6d6dc','#8b919c'];
+ const hole=(window.getAmixBlackHolePoint&&window.getAmixBlackHolePoint())||{x:window.innerWidth*.72,y:window.innerHeight*.5};
+ for(let i=0;i<count;i++){
+  const particle=document.createElement('i');particle.className='dust-particle';
+  const px=left+Math.random()*width,py=top+Math.random()*height;
+  const dx=hole.x-px,dy=hole.y-py;
+  const curve=(Math.random()-.5)*Math.min(180,Math.max(35,Math.hypot(dx,dy)*.23));
+  const sign=Math.random()<.5?-1:1;
+  const mx=dx*.27+curve*sign,my=dy*.27-curve*sign;
+  const qx=dx*.76-curve*sign*.28,qy=dy*.76+curve*sign*.28;
+  particle.style.setProperty('--px',px+'px');particle.style.setProperty('--py',py+'px');
+  particle.style.setProperty('--size',(1+Math.random()*2.8)+'px');
+  particle.style.setProperty('--shape',Math.random()>.68?'1px':'50%');
+  particle.style.setProperty('--dust',colors[Math.floor(Math.random()*colors.length)]);
+  particle.style.setProperty('--dx',dx+'px');particle.style.setProperty('--dy',dy+'px');
+  particle.style.setProperty('--mx',mx+'px');particle.style.setProperty('--my',my+'px');
+  particle.style.setProperty('--qx',qx+'px');particle.style.setProperty('--qy',qy+'px');
+  const spin=(Math.random()-.5)*1100;
+  particle.style.setProperty('--spin',spin+'deg');particle.style.setProperty('--spin30',(spin*.3)+'deg');particle.style.setProperty('--spin75',(spin*.75)+'deg');
+  particle.style.setProperty('--dur',(mode==='out'?.42+Math.random()*.2:.52+Math.random()*.3)+'s');
+  particle.style.setProperty('--delay',(Math.random()*.12)+'s');
+  particle.style.setProperty('--opacity',(0.4+Math.random()*.6).toFixed(2));
+  cloud.appendChild(particle);
+ }
+}
+let dustTimer=null;
+function playDust(view,mode){
+ const fx=document.getElementById('snapFx');
+ if(!fx||window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+ makeDustForView(view,mode);
+ fx.classList.remove('play','out','in');void fx.offsetWidth;
+ fx.classList.add('play',mode);
+ if(dustTimer) clearTimeout(dustTimer);
+ dustTimer=setTimeout(()=>{
+   fx.classList.remove('play','out','in');
+   const cloud=document.getElementById('dustCloud');
+   if(cloud) cloud.innerHTML='';
+   dustTimer=null;
+ },mode==='out'?760:980);
+}
+function showView(id){
+ const next=document.getElementById(id);
+ if(!next || !next.classList.contains('view')) return;
+ const current=document.querySelector('.view.active');
+ if(current && current.id===id) return;
+ if(window.__amixTransitioning){window.__amixPendingView=id;return;}
+ const reduced=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+ const finish=()=>{
+  document.querySelectorAll('.view').forEach(v=>{
+   v.classList.remove('active','dust-out','dust-in');
+   v.style.pointerEvents='';
+   v.style.filter='';
+  });
+  document.querySelectorAll('.nav button[data-view]').forEach(b=>b.classList.toggle('active',b.dataset.view===id));
+  document.body.classList.toggle('voice-mode',id==='voice');
+  document.body.classList.toggle('voice-entering',id==='voice');
+  if(id==='voice') setTimeout(()=>document.body.classList.remove('voice-entering'),1500);
+  else if(window.stopAmixVoiceMic) window.stopAmixVoiceMic();
+  const title=document.getElementById('pageTitle');
+  titleKey='title_'+id; if(title) title.textContent=t(titleKey);
+  next.classList.add('active');
+  next.querySelectorAll('.tile').forEach((tile,i)=>tile.style.setProperty('--i',i));
+  if(!reduced){
+   try { playDust(next,'in'); next.classList.add('dust-in'); setTimeout(()=>next.classList.remove('dust-in'),780); }
+   catch(err) { console.warn('Dust effect skipped:',err); }
+  }
+  window.scrollTo({top:0,behavior:reduced?'auto':'smooth'});
+  window.dispatchEvent(new Event('amix:viewchanged'));
+ };
+ if(current && !reduced){
+  window.__amixTransitioning=true;
+  current.classList.add('dust-out');
+  current.style.pointerEvents='none';
+  try { playDust(current,'out'); } catch(err) { console.warn('Dust effect skipped:',err); }
+  // Let the panel disintegrate and its dust spiral into the event horizon before changing views.
+  setTimeout(()=>{
+   current.classList.remove('dust-out');
+   current.style.pointerEvents='';
+   window.__amixTransitioning=false;
+   finish();
+   const pending=window.__amixPendingView;
+   window.__amixPendingView=null;
+   if(pending && pending!==id) showView(pending);
+  },760);
+  return;
+ }
+ finish();
+}
+
+// Navigation buttons were missing click handlers in the previous build.
+document.querySelectorAll('.nav button[data-view]').forEach(button=>{
+ button.addEventListener('click',()=>showView(button.dataset.view));
+});
+
+function setPrompt(t){showView('chat');const p=document.getElementById('prompt');p.value=t;p.focus()}
+function addMsg(text,who){const box=document.getElementById('messages');const el=document.createElement('div');el.className='msg '+who;const label=document.createElement('div');label.className='who';label.textContent=who==='user'?t('you'):'AMIX';const body=document.createElement('div');body.textContent=text;el.append(label,body);box.append(el);box.scrollTop=box.scrollHeight;}
+function addHistory(q,a){historyItems.unshift({q,a});renderHistory()}
+function renderHistory(){const el=document.getElementById('historyList');if(!historyItems.length){el.innerHTML='<p class="muted">'+t('hist_empty')+'</p>';return}el.innerHTML='';historyItems.forEach((h,i)=>{const d=document.createElement('div');d.className='historyitem';const b=document.createElement('strong');b.textContent=h.q;const p=document.createElement('p');p.className='muted';p.textContent=h.a.slice(0,160);d.append(b,p);d.onclick=()=>{showView('chat');addMsg(h.q,'user');addMsg(h.a,'ai')};el.append(d)})}
+function clearHistory(){historyItems=[];renderHistory()}
+function mathSolve(input){
+ let s=input.replace(/,/g,'.').replace(/[×·]/g,'*').replace(/÷/g,'/').replace(/[−–]/g,'-');
+ const eq=s.match(/(?:реши|solve|уравнение)?\s*(-?\d*\.?\d*)\s*x\s*([+-]\s*\d*\.?\d*)\s*=\s*(-?\d*\.?\d*)/i);
+ if(eq){let a=eq[1];a=(a===''||a==='+'?1:a==='-'?-1:Number(a));let btxt=eq[2].replace(/\s/g,'');let b=btxt?Number(btxt.replace(/\+/g,'')):0;let c=Number(eq[3]);if(!Number.isFinite(a)||!Number.isFinite(b)||!Number.isFinite(c)||a===0)return null;let x=(c-b)/a;return `Решим уравнение по шагам:\n\n${a}x ${b>=0?'+ '+b:'− '+Math.abs(b)} = ${c}\n1. Перенесём свободное число в правую часть:\n   ${a}x = ${c-b}\n2. Разделим обе части на ${a}:\n   x = (${c-b}) / ${a}\n\nОтвет: x = ${Number(x.toFixed(8))}\n\nПроверка: подставь это значение в исходное уравнение.`}
+ const expr=s.match(/(?:вычисли|посчитай|значение выражения|равно)?\s*([-+*/().\d\s]+)\s*[?]?$/i);
+ if(expr){let e=expr[1].trim();if(/[0-9)]\s*[+\-*/]\s*[0-9(]/.test(e)&&/^[\d\s.+*/()\-]+$/.test(e)&&/\d/.test(e)){try{let val=Function('"use strict";return ('+e+')')();if(Number.isFinite(val))return `Разберём вычисление:\n${e}\n\nВыполняем действия по порядку: сначала скобки, затем умножение и деление, затем сложение и вычитание.\n\nОтвет: ${Number(val.toFixed(10))}`}catch{}}}
+ return null;
+}
+function localAnswer(q){const m=mathSolve(q);if(m)return m;const lower=q.toLowerCase();if(lower.includes('пифагор'))return 'Теорема Пифагора применяется в прямоугольном треугольнике.\n\nЕсли a и b — катеты, а c — гипотенуза, то:\n\nc² = a² + b²\n\nПример: если катеты 3 и 4, то c² = 9 + 16 = 25, значит c = 5.\n\nПопробуй подставить значения из своей задачи.';if(lower.includes('производн'))return 'Производная показывает, как быстро меняется функция в каждой точке.\n\nНапример, если f(x) = x², то f′(x) = 2x.\nПри x = 3 наклон графика равен 6.\n\nЭто базовое объяснение; для конкретного примера напиши функцию.';if(lower.includes('привет'))return 'Привет! Я учебный помощник в автономном прототипе. Могу вычислить простые выражения, разобрать линейное уравнение и объяснить несколько базовых тем. Для остальных вопросов нужен встроенный ИИ-модуль.';if(lower.includes('физик'))return 'Для решения задачи по физике обычно нужны:\n1. Записать «Дано» и перевести величины в СИ.\n2. Определить, что нужно найти.\n3. Выбрать формулу и выразить неизвестную величину.\n4. Подставить значения с единицами измерения.\n5. Проверить ответ.\n\nВставь условие целиком — помогу определить формулу.';return 'Я получил твой вопрос, но в этом автономном демо нет полноценной языковой модели, поэтому я не буду выдумывать ответ.\n\nПопробуй:\n• задать линейное уравнение, например 2x + 5 = 17;\n• написать простое числовое выражение;\n• спросить про теорему Пифагора или производную.\n\nЧтобы приложение отвечало на любые вопросы без интернета, в него нужно встроить локальную языковую модель.'}
+let attachedImage=null;
+const imageInput=document.getElementById('chatImageInput');
+if(imageInput && document.getElementById('attachImage')){
+ document.getElementById('attachImage').addEventListener('click',()=>imageInput.click());
+ imageInput.addEventListener('change',e=>{const f=e.target.files[0];if(!f)return;attachedImage=f;const el=document.getElementById('chatAttachment');el.style.display='block';el.textContent='📎 '+f.name+' · '+(f.size/1024/1024).toFixed(2)+' '+t('mb')+'  '+t('photo_on');});
+}
+document.getElementById('chatForm').addEventListener('submit',async e=>{
+ e.preventDefault();
+ if(window.__amixGenerating)return;
+ const p=document.getElementById('prompt');
+ const q=p.value.trim();
+ if(!q&&!attachedImage){p.focus();return}
+ const shown=(attachedImage?t('photo_tag')+attachedImage.name+'] ':'')+q;
+ addMsg(shown,'user');
+ p.value='';
+ if(attachedImage){
+  attachedImage=null;if(imageInput)imageInput.value='';
+  const el=document.getElementById('chatAttachment');if(el)el.style.display='none';
+  if(!q){const a=t('photo_ans');addMsg(a,'ai');addHistory(shown,a);return}
+ }
+ if(window.amixLLM && window.amixLLM.isReady()){
+  await window.amixLLM.reply(shown);
+ }else{
+  const a=localAnswer(q||shown);
+  addMsg(a,'ai');addHistory(shown,a);
+ }
+});
+
+let authMode='login', demoUser=null;
+function openAuth(){document.getElementById('authBackdrop').classList.add('open');document.body.style.overflow='hidden';setAuthMode(demoUser?'login':authMode);setTimeout(()=>document.getElementById('authEmail').focus(),80)}
+function closeAuth(){document.getElementById('authBackdrop').classList.remove('open');document.body.style.overflow=''}
+function backdropClose(e){if(e.target.id==='authBackdrop')closeAuth()}
+function setAuthMode(mode){authMode=mode;document.getElementById('loginTab').classList.toggle('active',mode==='login');document.getElementById('signupTab').classList.toggle('active',mode==='signup');document.getElementById('nameField').style.display=mode==='signup'?'grid':'none';document.getElementById('authTitle').textContent=mode==='signup'?'Создать аккаунт':'Добро пожаловать';document.getElementById('authSubmit').textContent=mode==='signup'?'Создать профиль':'Войти';document.getElementById('authPassword').autocomplete=mode==='signup'?'new-password':'current-password';document.getElementById('authNote').textContent='Демо-режим: профиль существует только в этой вкладке. Настоящая регистрация требует защищённого сервера.'}
+function toast(message){const el=document.getElementById('toast');if(!el)return;el.textContent=message;el.classList.add('show');clearTimeout(window.__toastTimer);window.__toastTimer=setTimeout(()=>el.classList.remove('show'),3200)}
+function updateAccountUI(){const name=demoUser?demoUser.name:'Гость';document.getElementById('accountName').textContent=name;document.getElementById('accountSub').textContent=demoUser?demoUser.email:'Войти или создать аккаунт';document.getElementById('avatarLetter').textContent=(name.trim()[0]||'A').toUpperCase();document.getElementById('topAccount').textContent=demoUser?'♙ '+name:'♙ Аккаунт'}
+document.getElementById('authForm').addEventListener('submit',e=>{
+ e.preventDefault();
+ const emailInput=document.getElementById('authEmail');
+ const email=emailInput.value.trim();
+ emailInput.value=email;
+ const password=document.getElementById('authPassword').value;
+ if(!email || !emailInput.checkValidity()){toast(t('email_invalid'));emailInput.focus();return}
+ if(password.length<4){toast(t('pw_short'));document.getElementById('authPassword').focus();return}
+ const enteredName=document.getElementById('authName').value.trim();
+ demoUser={name:authMode==='signup'?(enteredName||email.split('@')[0]):email.split('@')[0],email};
+ updateAccountUI();closeAuth();toast(t(authMode==='signup'?'created':'logged'));
+});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeAuth()});
+
+
+(function initAmbientMotion(){
+ const layer=document.getElementById('particleLayer');
+ if(!layer || window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+ for(let i=0;i<24;i++){
+  const particle=document.createElement('span');particle.className='particle';
+  particle.style.setProperty('--left',(Math.random()*100)+'%');
+  particle.style.setProperty('--dur',(10+Math.random()*16)+'s');
+  particle.style.setProperty('--delay',(-Math.random()*24)+'s');
+  particle.style.setProperty('--drift',((Math.random()-.5)*130)+'px');
+  if(i%5===0){particle.style.width='4px';particle.style.height='4px';particle.style.background='#d7a2ff'}
+  layer.appendChild(particle);
+ }
+})();
+
+
+// Amix: прячем нижнюю панель, пока открыта клавиатура
+(function(){const b=document.body;
+ document.addEventListener('focusin',e=>{if(e.target.matches('input,textarea'))b.classList.add('kb-open')});
+ document.addEventListener('focusout',()=>setTimeout(()=>{const a=document.activeElement;if(!a||!a.matches('input,textarea'))b.classList.remove('kb-open')},120));
+})();
+
+/* ===== AMIX i18n (RU / EN) ===== */
+const I18N={
+ru:{nav_voice:'Голосовой ИИ',title_voice:'Голосовой ИИ',voice_soon_short:'Скоро',voice_badge:'ПРЕВЬЮ · БУДУЩЕЕ ОБНОВЛЕНИЕ',voice_overline:'AMIX VOICE EXPERIENCE',voice_title:'Голосовой ИИ',voice_description:'Скоро ты сможешь разговаривать с Amix голосом. Посмотри, что тебя ждёт.',voice_status_idle:'Голосовой режим пока не подключён',voice_status_active:'Микрофон активен · говори, чёрная дыра реагирует',voice_status_error:'Не удалось включить микрофон. Проверь разрешение браузера.',voice_mic_start:'Включить реакцию на голос',voice_mic_stop:'Остановить микрофон',voice_back_chat:'Вернуться в чат',voice_note:'Микрофон меняет только визуальный эффект и ничего не отправляет. Сам голосовой ИИ появится в будущем обновлении.',nav_pro:'Amix Pro',title_pro:'Amix Pro',pro_eyebrow:'AMIX MEMBERSHIP',pro_description:'Продолжай пользоваться Amix без ограничений после 7 бесплатных дней.',pro_month:'/ месяц',buy_pro:'Купить Pro-версию',trial_title:'7 дней бесплатно',trial_description:'Первые 7 дней можно общаться в чате как гость — без регистрации. После этого для продолжения потребуется Amix Pro.',pro_payment_notice:'Оплата в этом HTML-прототипе не подключена. Покупка демонстрационная; для настоящих платежей нужен платёжный сервис и серверная проверка доступа.',email_invalid:'Введи корректный адрес электронной почты.',pro_status_login:'Гостевой доступ доступен без аккаунта',pro_status_active:'Amix Pro активен',pro_status_trial:'Бесплатный период активен',pro_status_expired:'7 бесплатных дней закончились',paywall_title:'Бесплатный период завершён',paywall_text:'Твои 7 бесплатных дней закончились. Чтобы продолжить пользоваться чатом, оформи Amix Pro за 200 ₽ в месяц или создай профиль / войди в аккаунт.',paywall_demo_note:'Покупка пока демонстрационная: оплата не списывается, платёжный сервис не подключён.',paywall_account:'Создать профиль / войти',trial_ended_placeholder:'Бесплатный период завершён — оформи Amix Pro',toast_pro_active:'Демо-доступ Amix Pro активирован. Оплата не подключена.',toast_login_first:'Сначала создай аккаунт или войди.',doc_title:'Amix — офлайн ИИ-репетитор',tagline:'Твой офлайн ИИ-репетитор',nav_chat:'Чат',nav_history:'История',nav_settings:'Настройки',status_t:'Офлайн-режим',status_s:'Интерфейс доступен без интернета',eyebrow:'Личный учебный помощник',hello:'Привет! Что изучаем?',title_chat:'Просто напиши, что нужно',title_history:'История чатов',title_settings:'Настройки',chip_local:'● Локальный режим',acc_default:'♙ Аккаунт',chat_title:'✧ Учебный чат',chat_chip:'Офлайн-режим',welcome:'Привет! Напиши, что нужно решить или объяснить. Первые 7 дней можно пользоваться чатом без регистрации.',attach:'Прикрепить фото',placeholder:'Напиши сообщение…',send:'Отправить',hist_h:'Недавние чаты',hist_clear:'Очистить',hist_empty:'Чатов пока нет.',new_chat:'Новый чат',recent_chats:'Недавние чаты',menu:'Меню',privacy:'Конфиденциальность',login:'Войти',logout:'Выйти из аккаунта',logged_out:'Вы вышли из аккаунта',priv1:'Всё остаётся на вашем устройстве: чаты, фото и файлы не отправляются на серверы.',priv2:'В этой версии нет аналитики, рекламы и сторонних скриптов.',priv3:'Прикреплённые фото и файлы обрабатываются только в вашем браузере.',priv4:'Чаты хранятся, пока открыта страница, и пропадают при её закрытии. В браузере сохраняется только выбранный язык.',priv5:'Вход сейчас демонстрационный: имя и почта живут только в памяти страницы и никуда не передаются.',priv6:'Чтобы удалить чаты, нажмите «Очистить» в истории или закройте страницу.',msgs_n:'сообщ.',set_h:'Настройки приложения',set_p:'Прототип сохраняет настройки и историю только до закрытия страницы.',set_theme:'Тема оформления',set_theme_d:'Тёмная монохромная',set_mode:'Режим работы',set_mode_d:'Весь интерфейс доступен без интернета',set_mode_chip:'Офлайн',set_lang:'Язык',set_lang_d:'Язык интерфейса и ответов',notice:'Этот HTML — один файл. В нём нет серверов, учётных записей или отправки ваших данных. Для автоматического понимания фото и сложных вопросов потребуется встроить OCR и локальную ИИ-модель.',footer:'AMIX · ОФЛАЙН-ПРОТОТИП · Один HTML-файл',auth_eyebrow:'ТВОЙ УЧЕБНЫЙ ПРОФИЛЬ',auth_welcome:'Добро пожаловать',auth_signup_title:'Создать аккаунт',close:'Закрыть',tab_login:'Войти',tab_signup:'Создать аккаунт',lbl_name:'Как тебя зовут?',ph_name:'Имя или никнейм',lbl_email:'Электронная почта',lbl_pass:'Пароль',ph_pass:'Не менее 4 символов',btn_login:'Войти',btn_signup:'Создать профиль',auth_note:'Демо-режим: профиль существует только в этой вкладке. Настоящая регистрация требует защищённого сервера.',guest:'Гость',guest_sub:'7 дней бесплатно · без регистрации',you:'ТЫ',pw_short:'Пароль должен содержать минимум 4 символа',created:'Демо-профиль создан',logged:'Вы вошли в демо-профиль',photo_tag:'[Фото задания: ',mb:'МБ',photo_on:'— фото прикреплено',photo_ans:'Фото прикреплено. Сейчас этот HTML работает офлайн и не содержит встроенной модели распознавания текста с изображения, поэтому я не могу надёжно прочитать само фото автоматически. Напиши условие в сообщении — и я сразу попробую помочь. Чтобы приложение действительно понимало фото без переписывания, нужно встроить OCR и локальную ИИ-модель.'},
+en:{nav_voice:'Voice AI',title_voice:'Voice AI',voice_soon_short:'Soon',voice_badge:'PREVIEW · COMING IN A FUTURE UPDATE',voice_overline:'AMIX VOICE EXPERIENCE',voice_title:'Voice AI',voice_description:'Soon you will be able to talk to Amix out loud. Here is a preview of what is coming.',voice_status_idle:'Voice mode is not connected yet',voice_status_active:'Microphone active · speak and watch the black hole react',voice_status_error:'Could not enable the microphone. Check your browser permission.',voice_mic_start:'Enable voice-reactive visuals',voice_mic_stop:'Stop microphone',voice_back_chat:'Back to chat',voice_note:'The microphone only drives the visual effect and does not send audio anywhere. Voice AI itself will arrive in a future update.',nav_pro:'Amix Pro',title_pro:'Amix Pro',pro_eyebrow:'AMIX MEMBERSHIP',pro_description:'Keep using Amix without limits after your 7 free days.',pro_month:'/ month',buy_pro:'Buy Amix Pro',trial_title:'7 days free',trial_description:'Use the chat as a guest for the first 7 days — no account required. After that, Amix Pro is needed to continue.',pro_payment_notice:'Payments are not connected in this HTML prototype. The purchase button is a demo; real payments require a payment provider and server-side access checks.',email_invalid:'Enter a valid email address.',pro_status_login:'Guest access is available without an account',pro_status_active:'Amix Pro is active',pro_status_trial:'Free trial active',pro_status_expired:'Your 7 free days have ended',paywall_title:'Free trial ended',paywall_text:'Your 7 free days have ended. To keep using the chat, get Amix Pro for 200 ₽ per month, or create a profile / sign in.',paywall_demo_note:'This is a demo purchase: no payment is charged and no payment provider is connected.',paywall_account:'Create profile / sign in',trial_ended_placeholder:'Free trial ended — get Amix Pro',toast_pro_active:'Amix Pro demo access activated. Payments are not connected.',toast_login_first:'Create an account or sign in first.',doc_title:'Amix — offline AI tutor',tagline:'Your offline AI tutor',nav_chat:'Chat',nav_history:'History',nav_settings:'Settings',status_t:'Offline mode',status_s:'The interface works without internet',eyebrow:'Personal study assistant',hello:'Hi! What shall we study?',title_chat:'Just write what you need',title_history:'Chat history',title_settings:'Settings',chip_local:'● Local mode',acc_default:'♙ Account',chat_title:'✧ Study chat',chat_chip:'Offline mode',welcome:"Hi! Write what you need help solving or understanding. You can use the chat without an account for the first 7 days.",attach:'Attach photo',placeholder:'Write a message…',send:'Send',hist_h:'Recent chats',hist_clear:'Clear',hist_empty:'No chats yet.',new_chat:'New chat',recent_chats:'Recent chats',menu:'Menu',privacy:'Privacy',login:'Log in',logout:'Log out',logged_out:'You have logged out',priv1:'Everything stays on your device: chats, photos and files are not sent to any server.',priv2:'This version has no analytics, ads or third-party scripts.',priv3:'Photos and files you attach are processed only in your browser.',priv4:'Chats are kept while the page is open and disappear when it is closed. Only your language choice is saved in the browser.',priv5:'Sign-in is a demo for now: the name and email live only in the page memory and are never sent anywhere.',priv6:'To delete chats, tap “Clear” in History or close the page.',msgs_n:'msgs',set_h:'App settings',set_p:'The prototype keeps settings and history only until the page is closed.',set_theme:'Theme',set_theme_d:'Dark monochrome',set_mode:'Mode',set_mode_d:'The whole interface works without internet',set_mode_chip:'Offline',set_lang:'Language',set_lang_d:'Interface and answer language',notice:'This HTML is a single file. It has no servers, accounts or sending of your data. To understand photos and complex questions automatically, an OCR engine and a local AI model must be embedded.',footer:'AMIX · OFFLINE PROTOTYPE · Single HTML file',auth_eyebrow:'YOUR STUDY PROFILE',auth_welcome:'Welcome',auth_signup_title:'Create account',close:'Close',tab_login:'Log in',tab_signup:'Sign up',lbl_name:"What's your name?",ph_name:'Name or nickname',lbl_email:'Email',lbl_pass:'Password',ph_pass:'At least 4 characters',btn_login:'Log in',btn_signup:'Create profile',auth_note:'Demo mode: the profile exists only in this tab. Real sign-up needs a secure server.',guest:'Guest',guest_sub:'7 days free · no account needed',you:'YOU',pw_short:'Password must be at least 4 characters',created:'Demo profile created',logged:'Logged in to the demo profile',photo_tag:'[Task photo: ',mb:'MB',photo_on:'— photo attached',photo_ans:"Photo attached. This HTML runs offline and has no built-in text recognition, so I can't reliably read the photo automatically. Type the problem in your message and I'll try to help right away. To understand photos without retyping, OCR and a local AI model need to be embedded."}
+};
+let LANG='ru';
+try{const sv=localStorage.getItem('amix_lang');if(sv==='ru'||sv==='en')LANG=sv;else if(!/^ru|^uk|^be/i.test(navigator.language||'ru'))LANG='en'}catch(e){}
+let titleKey='hello';
+function t(k){return (I18N[LANG]&&I18N[LANG][k])||I18N.ru[k]||k}
+
+/* English answers */
+function mathSolveEn(input){
+ let s=input.replace(/,/g,'.').replace(/[×·]/g,'*').replace(/÷/g,'/').replace(/[−–]/g,'-');
+ const eq=s.match(/(?:solve|equation|реши|уравнение)?\s*(-?\d*\.?\d*)\s*x\s*([+-]\s*\d*\.?\d*)\s*=\s*(-?\d*\.?\d*)/i);
+ if(eq){let a=eq[1];a=(a===''||a==='+'?1:a==='-'?-1:Number(a));let btxt=eq[2].replace(/\s/g,'');let b=btxt?Number(btxt.replace(/\+/g,'')):0;let c=Number(eq[3]);if(!Number.isFinite(a)||!Number.isFinite(b)||!Number.isFinite(c)||a===0)return null;let x=(c-b)/a;
+  return `Let's solve the equation step by step:\n\n${a}x ${b>=0?'+ '+b:'− '+Math.abs(b)} = ${c}\n1. Move the constant to the right side:\n   ${a}x = ${c-b}\n2. Divide both sides by ${a}:\n   x = (${c-b}) / ${a}\n\nAnswer: x = ${Number(x.toFixed(8))}\n\nCheck: substitute this value into the original equation.`}
+ const expr=s.match(/(?:calculate|compute|evaluate|equals|вычисли|посчитай)?\s*([-+*/().\d\s]+)\s*[?]?$/i);
+ if(expr){let e=expr[1].trim();if(/[0-9)]\s*[+\-*/]\s*[0-9(]/.test(e)&&/^[\d\s.+*/()\-]+$/.test(e)&&/\d/.test(e)){try{let val=Function('"use strict";return ('+e+')')();if(Number.isFinite(val))return `Let's work it out:\n${e}\n\nWe go in order: parentheses first, then multiplication and division, then addition and subtraction.\n\nAnswer: ${Number(val.toFixed(10))}`}catch{}}}
+ return null;
+}
+const _localAnswerRu=localAnswer;
+localAnswer=function(q){
+ if(LANG==='ru')return _localAnswerRu(q);
+ const m=mathSolveEn(q);if(m)return m;
+ const l=q.toLowerCase();
+ if(/pythagor|пифагор/.test(l))return 'The Pythagorean theorem applies to a right triangle.\n\nIf a and b are the legs and c is the hypotenuse:\n\nc² = a² + b²\n\nExample: with legs 3 and 4, c² = 9 + 16 = 25, so c = 5.\n\nTry plugging in the values from your problem.';
+ if(/derivative|производн/.test(l))return 'The derivative shows how fast a function changes at each point.\n\nFor example, if f(x) = x², then f′(x) = 2x.\nAt x = 3 the slope of the graph is 6.\n\nThis is a basic explanation; for a specific example, write the function.';
+ if(/\b(hello|hi|hey)\b|привет/.test(l))return "Hi! I'm a study assistant in a standalone prototype. I can evaluate simple expressions, solve a linear equation and explain a few basic topics. For other questions a built-in AI module is needed.";
+ if(/physic|физик/.test(l))return 'To solve a physics problem you usually need to:\n1. Write down the givens and convert units to SI.\n2. Decide what to find.\n3. Pick a formula and express the unknown.\n4. Substitute values with units.\n5. Check the answer.\n\nPaste the full problem and I\'ll help pick the formula.';
+ return "I got your question, but this offline demo has no full language model, so I won't make up an answer.\n\nTry:\n• a linear equation, e.g. 2x + 5 = 17;\n• a simple numeric expression;\n• asking about the Pythagorean theorem or derivatives.\n\nTo answer any question without internet, a local language model must be embedded.";
+};
+
+/* Auth texts + account UI */
+function applyAuth(){
+ const su=authMode==='signup';
+ document.getElementById('authTitle').textContent=t(su?'auth_signup_title':'auth_welcome');
+ document.getElementById('authSubmit').textContent=t(su?'btn_signup':'btn_login');
+ document.getElementById('authNote').textContent=t('auth_note');
+}
+const _setAuthMode=setAuthMode;
+setAuthMode=function(m){_setAuthMode(m);applyAuth()};
+updateAccountUI=function(){
+ const name=demoUser?demoUser.name:t('guest');
+ const avatar=document.getElementById('avatarLetter');
+ document.getElementById('accountName').textContent=name;
+ document.getElementById('accountSub').textContent=demoUser?demoUser.email:t('guest_sub');
+ if(!demoUser){
+   avatar.classList.add('guest-avatar');
+   avatar.setAttribute('aria-label', LANG==='en'?'Guest avatar':'Аватар гостя');
+   avatar.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 2.8a7.6 7.6 0 0 0-7.6 7.6v9.1c0 .6.7.9 1.2.5l2.2-1.7 2.2 1.7a.8.8 0 0 0 1 0l2.2-1.7 2.2 1.7a.8.8 0 0 0 1 0l2.2-1.7 1.2.9c.5.4 1.2 0 1.2-.6v-8.2A7.6 7.6 0 0 0 12 2.8Z" fill="currentColor"/><ellipse cx="9.2" cy="10.3" rx="1.15" ry="1.55" fill="#151515"/><ellipse cx="14.8" cy="10.3" rx="1.15" ry="1.55" fill="#151515"/><path d="M10.1 14.1q1.9 1.7 3.8 0" fill="none" stroke="#151515" stroke-width="1.2" stroke-linecap="round"/></svg>';
+ }else{
+   avatar.classList.remove('guest-avatar');
+   avatar.removeAttribute('aria-label');
+   avatar.textContent=(name.trim()[0]||'A').toUpperCase();
+ }
+ document.getElementById('topAccount').textContent=demoUser?'♙ '+name:t('acc_default');
+ document.getElementById('accountButton').classList.toggle('is-guest',!demoUser);
+ document.getElementById('accountButton').setAttribute('aria-label',name);
+};
+
+function applyLang(){
+ document.documentElement.lang=LANG;
+ document.title=t('doc_title');
+ document.querySelectorAll('[data-i18n]').forEach(el=>{el.textContent=t(el.dataset.i18n)});
+ document.querySelectorAll('[data-i18n-attr]').forEach(el=>el.dataset.i18nAttr.split(',').forEach(p=>{const a=p.split(':');el.setAttribute(a[0],t(a[1]))}));
+ const pt=document.getElementById('pageTitle');if(pt)pt.textContent=t(titleKey);
+ const code=LANG.toUpperCase();
+ document.getElementById('langBtn').textContent=code;
+ document.getElementById('langMini').textContent=code;
+ document.querySelectorAll('.langsw .chip').forEach(b=>b.classList.toggle('on',b.dataset.lang===LANG));
+ updateAccountUI();renderHistory();applyAuth();
+}
+function setLang(l){
+ if(l===LANG)return;LANG=l;
+ try{localStorage.setItem('amix_lang',l)}catch(e){}
+ applyLang();
+ const m=document.querySelector('.main');
+ if(m&&!matchMedia('(prefers-reduced-motion: reduce)').matches){m.classList.remove('lang-swap');void m.offsetWidth;m.classList.add('lang-swap');setTimeout(()=>m.classList.remove('lang-swap'),450)}
+}
+function toggleLang(){setLang(LANG==='ru'?'en':'ru')}
+applyLang();
+
+/* Amix: высота приложения под реальный экран, автоподгон поля ввода */
+(function(){
+ const root=document.documentElement;
+ function sync(){
+  const h=Math.round((window.visualViewport&&visualViewport.height)||window.innerHeight);
+  root.style.setProperty('--app-h',h+'px');
+  const c=document.getElementById('chat');
+  document.body.classList.toggle('chat-on',!!(c&&c.classList.contains('active')));
+ }
+ const _sv=showView; showView=function(id){_sv(id);sync()};
+ addEventListener('resize',sync);addEventListener('amix:viewchanged',sync);addEventListener('orientationchange',()=>setTimeout(sync,200));
+ if(window.visualViewport)visualViewport.addEventListener('resize',sync);
+ sync();
+ const ta=document.getElementById('prompt');
+ function grow(){ta.style.height='auto';ta.style.height=Math.min(ta.scrollHeight,120)+'px'}
+ ta.addEventListener('input',grow);
+ document.getElementById('chatForm').addEventListener('submit',()=>setTimeout(()=>{ta.style.height=''},0));
+})();
+
+/* ===== Amix: чаты, новый чат, меню ===== */
+let chats=[],currentChat=null;
+const _addMsgRaw=addMsg;
+addMsg=function(text,who){
+ _addMsgRaw(text,who);
+ if(!currentChat){currentChat={id:Date.now(),title:'',msgs:[]};chats.unshift(currentChat)}
+ currentChat.msgs.push({text,who});
+ if(!currentChat.title&&who==='user')currentChat.title=text.slice(0,48);
+ renderHistory();
+};
+addHistory=function(){renderHistory()};
+function chatTitle(c){return c.title||'…'}
+renderHistory=function(){
+ const list=document.getElementById('historyList'),dr=document.getElementById('drawerChats');
+ if(!list||!dr)return;
+ list.innerHTML='';dr.innerHTML='';
+ if(!chats.length){
+  list.innerHTML='<p class="muted">'+t('hist_empty')+'</p>';
+  dr.innerHTML='<div class="dr-empty">'+t('hist_empty')+'</div>';return;
+ }
+ chats.forEach(c=>{
+  const d=document.createElement('div');d.className='historyitem'+(c===currentChat?' cur':'');
+  d.tabIndex=0;
+  const b=document.createElement('strong');b.textContent=chatTitle(c);
+  const last=[...c.msgs].reverse().find(m=>m.who==='ai');
+  const pp=document.createElement('p');pp.className='muted';pp.textContent=(last?last.text.replace(/\s+/g,' ').slice(0,110):'')+(last?'':c.msgs.length+' '+t('msgs_n'));
+  d.append(b,pp);d.onclick=()=>openChat(c);
+  d.onkeydown=e=>{if(e.key==='Enter')openChat(c)};
+  list.append(d);
+  const r=document.createElement('button');r.type='button';r.className='dr-chat'+(c===currentChat?' cur':'');
+  r.textContent=chatTitle(c);r.onclick=()=>openChat(c);dr.append(r);
+ });
+};
+clearHistory=function(){chats=[];currentChat=null;resetChatView();renderHistory()};
+function resetChatView(){
+ const box=document.getElementById('messages');
+ box.innerHTML='<div class="msg ai"><div class="who">AMIX</div><span data-i18n="welcome">'+t('welcome')+'</span></div>';
+ attachedImage=null;const im=document.getElementById('chatImageInput');if(im)im.value='';
+ const at=document.getElementById('chatAttachment');if(at)at.style.display='none';
+ const ta=document.getElementById('prompt');if(ta){ta.value='';ta.style.height=''}
+}
+function newChat(){
+ currentChat=null;resetChatView();renderHistory();
+ showView('chat');closeDrawer();
+}
+function openChat(c){
+ currentChat=c;
+ const box=document.getElementById('messages');box.innerHTML='';
+ c.msgs.forEach(m=>_addMsgRaw(m.text,m.who));
+ renderHistory();showView('chat');closeDrawer();
+}
+/* меню */
+function openDrawer(){document.body.classList.add('drawer-open');document.getElementById('drawer').setAttribute('aria-hidden','false')}
+function closeDrawer(){document.body.classList.remove('drawer-open');document.getElementById('drawer').setAttribute('aria-hidden','true')}
+(function(){
+ const mq=matchMedia('(max-width:700px)');
+ const brand=document.getElementById('brandBtn');
+ const open=()=>{const dd=document.getElementById('drawer');if(mq.matches||document.body.classList.contains('voice-mode')||(dd&&getComputedStyle(dd).display!=='none'))openDrawer()};
+ let tapT=0,tx=0,ty=0,moved=false;
+ const fire=()=>{const n=Date.now();if(n-tapT<450)return;tapT=n;open()};
+ brand.addEventListener('touchstart',e=>{const p=e.touches[0];tx=p.clientX;ty=p.clientY;moved=false},{passive:true});
+ brand.addEventListener('touchmove',e=>{const p=e.touches[0];if(Math.abs(p.clientX-tx)>10||Math.abs(p.clientY-ty)>10)moved=true},{passive:true});
+ brand.addEventListener('touchend',e=>{if(moved)return;e.preventDefault();fire()},{passive:false});
+ brand.addEventListener('click',fire);
+ brand.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();open()}});
+ document.getElementById('drawerBackdrop').addEventListener('click',closeDrawer);
+ document.getElementById('drawerClose').addEventListener('click',closeDrawer);
+ document.addEventListener('keydown',e=>{if(e.key==='Escape')closeDrawer()});
+ mq.addEventListener&&mq.addEventListener('change',()=>{if(!mq.matches)closeDrawer()});
+ document.querySelectorAll('.dr-nav button[data-view]').forEach(b=>b.addEventListener('click',()=>{showView(b.dataset.view);closeDrawer()}));
+ /* свайп влево закрывает */
+ const dr=document.getElementById('drawer');let sx=null;
+ dr.addEventListener('touchstart',e=>{sx=e.touches[0].clientX},{passive:true});
+ dr.addEventListener('touchmove',e=>{if(sx!==null&&e.touches[0].clientX-sx<-70){sx=null;closeDrawer()}},{passive:true});
+ const _sv2=showView;showView=function(id){_sv2(id);document.querySelectorAll('.dr-nav button').forEach(b=>b.classList.toggle('active',b.dataset.view===id))};
+})();
+renderHistory();
+
+/* ===== Amix: вход/выход и конфиденциальность в меню ===== */
+function closePriv(){document.getElementById('privBackdrop').classList.remove('open')}
+function openPriv(d){closeDrawer();openLegal(typeof d==='string'?d:'policy')}
+(function(){
+ document.getElementById('privBtn').addEventListener('click',openPriv);
+ document.getElementById('privClose').addEventListener('click',closePriv);
+ document.getElementById('privBackdrop').addEventListener('click',e=>{if(e.target.id==='privBackdrop')closePriv()});
+ document.addEventListener('keydown',e=>{if(e.key==='Escape')closePriv()});
+ document.getElementById('drAuth').addEventListener('click',()=>{
+  closeDrawer();
+  if(demoUser){demoUser=null;updateAccountUI();toast(t('logged_out'))}
+  else openAuth();
+ });
+ const _uai=updateAccountUI;
+ updateAccountUI=function(){
+  _uai();
+  const b=document.getElementById('drAuth');
+  if(b){b.textContent=t(demoUser?'logout':'login');b.classList.toggle('out',!!demoUser)}
+ };
+ updateAccountUI();
+})();
+</script>
+
+<script>
+/* Amix Pro: 7-day guest trial. Local prototype only; no real payment processing. */
+(function(){
+  const TRIAL_MS = 7 * 24 * 60 * 60 * 1000;
+  const ACCESS_KEY = 'amix_guest_trial_v2';
+  let gateShown = false;
+  let access = readAccess();
+
+  function readAccess(){
+    try {
+      const stored = JSON.parse(localStorage.getItem(ACCESS_KEY) || 'null');
+      if (stored && Number.isFinite(stored.startedAt)) return stored;
+    } catch(e) {}
+    return null;
+  }
+  function saveAccess(){
+    try { localStorage.setItem(ACCESS_KEY, JSON.stringify(access)); } catch(e) {}
+  }
+  function ensureTrial(){
+    if(!access){ access = {startedAt: Date.now(), pro:false}; saveAccess(); }
+    return access;
+  }
+  function remaining(){
+    ensureTrial();
+    if(access.pro) return Infinity;
+    return Math.max(0, TRIAL_MS - (Date.now() - access.startedAt));
+  }
+  function hasAccess(){ return !!access.pro || remaining() > 0; }
+  function pluralDays(ms){
+    const n = Math.max(0, Math.ceil(ms / (24*60*60*1000)));
+    return LANG === 'ru' ? (n + ' дн. осталось') : (n + ' day' + (n === 1 ? '' : 's') + ' left');
+  }
+  function updateProUI(){
+    const ms = remaining();
+    const label = access.pro ? t('pro_status_active') : ms > 0 ? (t('pro_status_trial') + ' · ' + pluralDays(ms)) : t('pro_status_expired');
+    document.querySelectorAll('[data-pro-status]').forEach(el => { el.textContent = label; });
+    updateChatControls();
+  }
+  function updateChatControls(){
+    const allowed = hasAccess();
+    const prompt = document.getElementById('prompt');
+    const send = document.querySelector('#chatForm button[type="submit"]');
+    if(prompt){
+      prompt.disabled = !allowed;
+      prompt.placeholder = allowed ? t('placeholder') : t('trial_ended_placeholder');
+      prompt.setAttribute('aria-disabled', String(!allowed));
+    }
+    if(send){ send.disabled = !allowed; send.setAttribute('aria-disabled', String(!allowed)); }
+  }
+  function hidePaywall(){
+    const el = document.getElementById('amixPaywall');
+    if(el) el.classList.remove('open');
+    gateShown = false;
+    document.body.style.overflow = '';
+  }
+  function showPaywall(){
+    if(hasAccess()) return;
+    let el = document.getElementById('amixPaywall');
+    if(!el){
+      el = document.createElement('div');
+      el.id = 'amixPaywall';
+      el.className = 'modal-backdrop open';
+      el.setAttribute('role','dialog');
+      el.setAttribute('aria-modal','true');
+      el.setAttribute('aria-labelledby','amixPayTitle');
+      el.innerHTML = `
+        <div class="modal">
+          <div class="modal-top"><div><div class="eyebrow">AMIX PRO</div><h3 id="amixPayTitle">${t('paywall_title')}</h3></div></div>
+          <p class="muted" id="amixPayText">${t('paywall_text')}</p>
+          <div style="font-size:30px;font-weight:800;margin:12px 0 16px">200 ₽ <span style="font-size:14px;font-weight:500;color:#aaa">${t('pro_month')}</span></div>
+          <button class="btn primary" id="amixPayBuy" type="button" style="width:100%;margin:0 0 9px">${t('buy_pro')}</button>
+          <button class="btn ghost" id="amixPayAccount" type="button" style="width:100%">${t('paywall_account')}</button>
+          <p class="auth-note" id="amixPayNote">${t('paywall_demo_note')}</p>
+        </div>`;
+      document.body.appendChild(el);
+      document.getElementById('amixPayBuy').addEventListener('click', window.buyAmixPro);
+      document.getElementById('amixPayAccount').addEventListener('click', function(){
+        // Keep the paywall underneath so closing the account dialog cannot bypass it.
+        setAuthMode('signup');
+        openAuth();
+      });
+    } else {
+      document.getElementById('amixPayTitle').textContent = t('paywall_title');
+      document.getElementById('amixPayText').textContent = t('paywall_text');
+      document.getElementById('amixPayBuy').textContent = t('buy_pro');
+      document.getElementById('amixPayAccount').textContent = t('paywall_account');
+      document.getElementById('amixPayNote').textContent = t('paywall_demo_note');
+      el.classList.add('open');
+    }
+    gateShown = true;
+    document.body.style.overflow = 'hidden';
+  }
+  window.buyAmixPro = function(){
+    ensureTrial();
+    if(!demoUser){
+      // The intended flow is account first, then the Pro purchase step.
+      setAuthMode('signup');
+      openAuth();
+      toast(t('toast_login_first'));
+      return;
+    }
+    /* Demo switch only: the prototype does not collect money or activate a paid server plan. */
+    access.pro = true;
+    saveAccess();
+    hidePaywall();
+    updateProUI();
+    toast(t('toast_pro_active'));
+  };
+
+  // Keep guest access open immediately. Do not force sign-up on page load.
+  ensureTrial();
+  updateProUI();
+
+  // If the seventh day ends while the page is still open, lock sending and display the offer.
+  function refreshAccess(){
+    updateProUI();
+    if(!hasAccess()) showPaywall();
+  }
+  document.getElementById('chatForm').addEventListener('submit', function(e){
+    if(!hasAccess()){
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      updateChatControls();
+      showPaywall();
+    }
+  }, true);
+  document.querySelectorAll('[data-view="pro"]').forEach(function(button){
+    button.addEventListener('click', function(e){
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      showView('pro');
+      updateProUI();
+      if(!hasAccess()) showPaywall();
+    }, true);
+  });
+
+  // A successful demo sign-up/sign-in never bypasses the expired trial; it just offers Pro again.
+  document.getElementById('authForm').addEventListener('submit', function(){
+    setTimeout(function(){
+      updateProUI();
+      if(!hasAccess()) showPaywall();
+    }, 0);
+  });
+
+  // Keep all labels translated when the user switches RU/EN while Pro screens are open.
+  const oldApplyLang = applyLang;
+  applyLang = function(){
+    oldApplyLang();
+    const el = document.getElementById('amixPaywall');
+    if(el && el.classList.contains('open') && !hasAccess()){
+      document.getElementById('amixPayTitle').textContent = t('paywall_title');
+      document.getElementById('amixPayText').textContent = t('paywall_text');
+      document.getElementById('amixPayBuy').textContent = t('buy_pro');
+      document.getElementById('amixPayAccount').textContent = t('paywall_account');
+      document.getElementById('amixPayNote').textContent = t('paywall_demo_note');
+    }
+    updateProUI();
+  };
+  // The local-file prototype may be left open across the end of the trial.
+  window.setInterval(refreshAccess, 30000);
+  document.addEventListener('visibilitychange', refreshAccess);
+  const guestPrompt = document.getElementById('prompt');
+  guestPrompt.addEventListener('focus', refreshAccess);
+  guestPrompt.addEventListener('input', function(){ if(!hasAccess()) refreshAccess(); });
+
+  const proSection = document.getElementById('pro');
+  if(proSection && !proSection.querySelector('[data-pro-status]')){
+    const p = document.createElement('p');
+    p.className = 'muted';
+    p.style.marginTop = '12px';
+    p.setAttribute('data-pro-status','');
+    proSection.appendChild(p);
+  }
+  updateProUI();
+  if(!hasAccess()) showPaywall();
+})();
+</script>
+
+
+<script>
+/* Physically-inspired black hole: luminous relativistic disk, photon ring, lensing glow and orbiting plasma. */
+(function initAmixBlackHole(){
+ const canvas=document.getElementById('blackHoleCanvas');
+ if(!canvas) return;
+ const ctx=canvas.getContext('2d',{alpha:true});
+ if(!ctx) return;
+ let w=0,h=0,dpr=1,t=0,last=0,frame=0,stars=[],plasma=[],voiceExpansion=0;
+ const reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+ const rand=(a,b)=>a+Math.random()*(b-a);
+ function point(){
+  const target=document.body.classList.contains('voice-mode')?1:0;
+  voiceExpansion += (target-voiceExpansion)*.045;
+  if(Math.abs(target-voiceExpansion)<.001)voiceExpansion=target;
+  const normal=w<700?{x:w*.74,y:h*.39}:{x:w*.715,y:h*.50};
+  return {x:normal.x+(w*.5-normal.x)*voiceExpansion,y:normal.y+(h*.5-normal.y)*voiceExpansion};
+ }
+ window.getAmixBlackHolePoint=()=>point();
+ function resize(){
+  w=Math.max(1,window.innerWidth);h=Math.max(1,window.innerHeight);dpr=Math.min(window.devicePixelRatio||1,1.5);
+  canvas.width=Math.round(w*dpr);canvas.height=Math.round(h*dpr);canvas.style.width=w+'px';canvas.style.height=h+'px';
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+  stars=Array.from({length:Math.min(180,Math.round(w*h/6500))},()=>({x:Math.random()*w,y:Math.random()*h,r:rand(.35,1.25),phase:rand(0,Math.PI*2),tw:rand(.3,1.4)}));
+  plasma=Array.from({length:124},()=>({a:rand(0,Math.PI*2),orbit:rand(1.08,2.08),speed:rand(.22,.64)*(Math.random()<.5?-1:1),size:rand(.45,1.6),phase:rand(0,7)}));
+  draw(0,true);
+ }
+ function ellipseStroke(x,y,rx,ry,rotation,color,width,blur=0){
+  ctx.save();ctx.translate(x,y);ctx.rotate(rotation);ctx.beginPath();ctx.ellipse(0,0,rx,ry,0,0,Math.PI*2);ctx.strokeStyle=color;ctx.lineWidth=width;ctx.shadowColor=color;ctx.shadowBlur=blur;ctx.stroke();ctx.restore();
+ }
+ function softRing(d,a0,a1,mult){
+  const N=Math.max(8,Math.round(72*(a1-a0)/(Math.PI*2)));
+  ctx.lineCap='round';ctx.lineWidth=d.w;ctx.shadowBlur=0;
+  for(let k=0;k<N;k++){
+   const st=a0+(a1-a0)*k/N,en=a0+(a1-a0)*Math.min(1,(k+1.5)/N),m=(st+en)/2;
+   const al=(.18+.82*Math.pow(.5+.5*Math.cos(m-d.phase),2.2))*.62*mult;
+   ctx.beginPath();ctx.ellipse(0,0,d.rx,d.ry,0,st,en);ctx.strokeStyle='rgba('+d.rgb+','+al.toFixed(3)+')';ctx.stroke();
+  }
+ }
+ function taperArc(x,y,rx,ry,a0,a1,rgb,alpha,width){
+  const N=48;ctx.lineCap='round';ctx.lineWidth=width;ctx.shadowBlur=0;
+  for(let k=0;k<N;k++){
+   const st=k/N,en=Math.min(1,(k+1.5)/N),m=(st+en)/2;
+   const taper=Math.pow(Math.sin(m*Math.PI),.75);
+   ctx.beginPath();ctx.ellipse(x,y,rx,ry,0,a0+(a1-a0)*st,a0+(a1-a0)*en);
+   ctx.strokeStyle='rgba('+rgb+','+(alpha*taper).toFixed(3)+')';ctx.stroke();
+  }
+ }
+ function draw(now,staticFrame=false){
+  if(!staticFrame && document.hidden){frame=requestAnimationFrame(draw);return;}
+  const dt=last?Math.min(.04,Math.max(0,(now-last)/1000)):0;last=now;if(!reduce)t+=dt;
+  ctx.clearRect(0,0,w,h);
+  // Night-sky stars, subtly pulsing rather than competing with the page.
+  for(const s of stars){
+   const alpha=.14+.28*(.5+.5*Math.sin(t*s.tw+s.phase));
+   ctx.globalAlpha=alpha;ctx.fillStyle=s.phase>3?'#d8e6ff':'#f6f0e9';ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,Math.PI*2);ctx.fill();
+  }
+  ctx.globalAlpha=1;
+  const c=point();
+  const voiceLevel=Math.min(1,Math.max(0,Number(window.amixVoiceLevel)||0));
+  const wobble=voiceExpansion*(.25+voiceLevel*5.8);
+  const cx=c.x+Math.sin(t*63)*wobble,cy=c.y+Math.cos(t*51)*wobble*.72;
+  const normalR=Math.max(49,Math.min(119,Math.min(w,h)*.13));
+  const giantR=Math.min(w,h)*.465;
+  const voiceBreath=1+voiceExpansion*(.008*Math.sin(t*2.4))+voiceLevel*(.028+.018*Math.sin(t*70));
+  const rRaw=(normalR+(giantR-normalR)*voiceExpansion)*voiceBreath;
+  const fitR=(w*.5)/2.2;
+  const r=rRaw+(Math.min(rRaw,fitR)-rRaw)*voiceExpansion;
+  const diskRX=r*2.55,diskRY=r*.79,spin=t*(.16+voiceExpansion*.58+voiceLevel*1.55);
+  // Broad gravitational glow around the disk.
+  let halo=ctx.createRadialGradient(cx,cy,r*.35,cx,cy,r*3.05);
+  halo.addColorStop(0,'rgba(0,0,0,0)');halo.addColorStop(.25,'rgba(255,158,86,.045)');halo.addColorStop(.43,'rgba(235,105,43,.10)');halo.addColorStop(.61,'rgba(112,95,180,.055)');halo.addColorStop(1,'rgba(0,0,0,0)');
+  ctx.fillStyle=halo;ctx.beginPath();ctx.ellipse(cx,cy,diskRX*1.45,diskRY*2.25,-.045,0,Math.PI*2);ctx.fill();
+  // Far side of the accretion disk, behind the event horizon.
+  ctx.save();ctx.translate(cx,cy);ctx.rotate(-.055+Math.sin(t*.13)*.012);ctx.scale(1,.31);
+  let disk=ctx.createRadialGradient(0,0,r*.48,0,0,r*2.7);
+  disk.addColorStop(0,'rgba(0,0,0,0)');disk.addColorStop(.24,'rgba(29,18,19,.12)');disk.addColorStop(.40,'rgba(123,47,32,.43)');disk.addColorStop(.54,'rgba(244,119,54,.88)');disk.addColorStop(.60,'rgba(255,225,169,.95)');disk.addColorStop(.66,'rgba(255,137,61,.93)');disk.addColorStop(.77,'rgba(184,60,37,.68)');disk.addColorStop(.91,'rgba(73,38,49,.18)');disk.addColorStop(1,'rgba(0,0,0,0)');
+  ctx.fillStyle=disk;ctx.beginPath();ctx.ellipse(0,0,r*2.7,r*2.7,0,0,Math.PI*2);ctx.fill();
+  const rings=[];
+  for(let i=0;i<5;i++){
+   const rr=r*(1.05+i*.28),phase=spin*(i%2?1:-1)+i*.9;
+   const def={rx:rr*1.45,ry:rr*.88,rgb:i%2?'255,201,141':'255,106,47',w:Math.max(.9,2.3-i*.28),phase};
+   rings.push(def);softRing(def,0,Math.PI*2,1);
+  }
+  ctx.restore();
+  // Plasma knots traveling around the disk: short, hot trails with a little Doppler variation.
+  const drawPlasma=(front)=>{for(const p of plasma){
+   const a=p.a+t*p.speed*(1+voiceExpansion*1.6+voiceLevel*2.8);
+   if((Math.sin(a)>0)!==front)continue;
+   const rr=r*p.orbit;
+   const px=cx+Math.cos(a)*rr*1.54,py=cy+Math.sin(a)*rr*.34;
+   const tailA=a-p.speed*.10;
+   const tx=cx+Math.cos(tailA)*rr*1.54,ty=cy+Math.sin(tailA)*rr*.34;
+   const hot=.45+.55*(.5+.5*Math.sin(a*2+p.phase));
+   ctx.globalAlpha=.2+.62*hot;ctx.strokeStyle=hot>.77?'#fff0cc':hot>.48?'#ffb46f':'#dd7046';ctx.lineWidth=p.size;
+   ctx.shadowColor='#ff8b45';ctx.shadowBlur=4+hot*5;ctx.beginPath();ctx.moveTo(tx,ty);ctx.lineTo(px,py);ctx.stroke();
+   ctx.globalAlpha=1;
+  }ctx.shadowBlur=0;};
+  drawPlasma(false);
+  ctx.shadowBlur=0;
+  // Event horizon with near-black center and a thin photon ring.
+  const holeR=r*.68;
+  let shadow=ctx.createRadialGradient(cx-holeR*.2,cy-holeR*.25,holeR*.15,cx,cy,holeR*1.27);
+  shadow.addColorStop(0,'#000000');shadow.addColorStop(.72,'#000000');shadow.addColorStop(.87,'#030303');shadow.addColorStop(.96,'rgba(255,213,168,.2)');shadow.addColorStop(1,'rgba(255,148,83,0)');
+  ctx.fillStyle=shadow;ctx.beginPath();ctx.arc(cx,cy,holeR*1.27,0,Math.PI*2);ctx.fill();
+  ellipseStroke(cx,cy,holeR*1.02,holeR*.99,0,'rgba(255,239,215,.78)',Math.max(1.1,r*.017),12);
+  ellipseStroke(cx,cy,holeR*1.10,holeR*1.055,0,'rgba(255,136,72,.65)',Math.max(.8,r*.012),18);
+  // Lensed light arcs above and below the black disk.
+  ctx.save();ctx.translate(cx,cy);ctx.rotate(-.035);
+  const lw=Math.max(1.1,r*.018);
+  taperArc(0,-holeR*.03,holeR*1.23,holeR*1.15,Math.PI,Math.PI*2,'255,160,95',.2,lw*3.6);
+  taperArc(0,-holeR*.03,holeR*1.23,holeR*1.15,Math.PI,Math.PI*2,'255,236,208',.8,lw);
+  taperArc(0,holeR*.05,holeR*1.20,holeR*1.12,0,Math.PI,'255,110,55',.18,lw*3.2);
+  taperArc(0,holeR*.05,holeR*1.20,holeR*1.12,0,Math.PI,'255,128,67',.7,lw*.8);
+  ctx.restore();
+  // Repaint the black center so lens glow never fills the event horizon.
+  const core=ctx.createRadialGradient(cx,cy,holeR*.15,cx,cy,holeR*1.01);
+  core.addColorStop(0,'#000');core.addColorStop(.90,'#000');core.addColorStop(.985,'#030303');core.addColorStop(1,'rgba(0,0,0,0)');
+  ctx.fillStyle=core;ctx.beginPath();ctx.arc(cx,cy,holeR*1.01,0,Math.PI*2);ctx.fill();
+  // Near half of the disk passes in front of the horizon, so rings are never cut off at its edge.
+  ctx.save();ctx.translate(cx,cy);ctx.rotate(-.055+Math.sin(t*.13)*.012);ctx.scale(1,.31);
+  for(const d of rings)softRing(d,0,Math.PI,.85);
+  ctx.restore();
+  drawPlasma(true);ctx.shadowBlur=0;
+  // Soft scene vignette keeps text readable around the bright disk.
+  const vg=ctx.createRadialGradient(w*.5,h*.48,Math.min(w,h)*.12,w*.5,h*.48,Math.max(w,h)*.78);
+  vg.addColorStop(0,'rgba(0,0,0,0)');vg.addColorStop(1,'rgba(0,0,0,.44)');ctx.fillStyle=vg;ctx.fillRect(0,0,w,h);
+  if(!reduce && !staticFrame)frame=requestAnimationFrame(draw);
+ }
+ resize();
+ window.addEventListener('resize',resize,{passive:true});
+ document.addEventListener('visibilitychange',()=>{if(!document.hidden&&!reduce){last=0;cancelAnimationFrame(frame);frame=requestAnimationFrame(draw);}});
+ if(!reduce)frame=requestAnimationFrame(draw);
+})();
+</script>
+
+
+<script>
+/* Voice preview: use the mic only as a local analyser for the black-hole animation. No audio is recorded or uploaded. */
+(function initAmixVoicePreview(){
+ let stream=null,audioContext=null,analyser=null,meterFrame=0,active=false;
+ const button=()=>document.getElementById('voiceMicBtn');
+ const status=()=>document.getElementById('voiceStatus');
+ const dot=()=>document.getElementById('voiceStatusDot');
+ function setState(state){
+  const st=status(),bt=button(),d=dot();
+  if(st)st.dataset.i18n=state==='active'?'voice_status_active':state==='error'?'voice_status_error':'voice_status_idle';
+  if(st)st.textContent=t(st.dataset.i18n);
+  if(bt){bt.dataset.i18n=state==='active'?'voice_mic_stop':'voice_mic_start';bt.textContent=t(bt.dataset.i18n)}
+  if(d)d.classList.toggle('active',state==='active');
+ }
+ function meter(){
+  if(!active||!analyser)return;
+  const data=new Uint8Array(analyser.fftSize);analyser.getByteTimeDomainData(data);
+  let sum=0;for(let i=0;i<data.length;i++){const v=(data[i]-128)/128;sum+=v*v}
+  const rms=Math.sqrt(sum/data.length);
+  const level=Math.min(1,rms*15.5);
+  const previous=Number(window.amixVoiceLevel)||0;
+  window.amixVoiceLevel=level>previous?previous*.38+level*.62:previous*.84+level*.16;
+  meterFrame=requestAnimationFrame(meter);
+ }
+ async function start(){
+  if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia)throw new Error('Microphone API is unavailable');
+  stream=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:true,noiseSuppression:true,autoGainControl:true}});
+  const AC=window.AudioContext||window.webkitAudioContext;if(!AC)throw new Error('Web Audio is unavailable');
+  audioContext=new AC();await audioContext.resume();analyser=audioContext.createAnalyser();analyser.fftSize=512;analyser.smoothingTimeConstant=.25;
+  const source=audioContext.createMediaStreamSource(stream);source.connect(analyser);
+  active=true;window.amixVoiceLevel=0;setState('active');meter();
+ }
+ async function stop(){
+  active=false;if(meterFrame)cancelAnimationFrame(meterFrame);meterFrame=0;
+  if(stream){stream.getTracks().forEach(track=>track.stop());stream=null}
+  if(audioContext){try{await audioContext.close()}catch(e){}audioContext=null}
+  analyser=null;window.amixVoiceLevel=0;setState('idle');
+ }
+ window.stopAmixVoiceMic=stop;
+ window.toggleVoiceMic=async function(){
+  if(active){await stop();return}
+  const bt=button();if(bt){bt.disabled=true}
+  try{await start()}
+  catch(err){console.warn('Amix voice preview microphone:',err);await stop();setState('error')}
+  finally{if(bt)bt.disabled=false}
+ };
+ document.addEventListener('visibilitychange',()=>{if(document.hidden&&active)stop()});
+})();
+</script>
+
+
+<script>
+/* Amix: правовые документы (РФ), согласие, уведомление о хранении, удаление данных */
+(function(){
+ const PH=(x)=>'<mark class="ph">'+x+'</mark>';
+ const L={ru:{
+ policy:{t:'Политика конфиденциальности',h:`
+<p class="meta">Редакция от 11.10.2026. Политика обработки персональных данных (152-ФЗ).</p>
+<h4>1. Общие положения</h4>
+<p>1.1. Политика определяет порядок обработки персональных данных и меры по их защите в сервисе «Amix» (далее — Сервис). Она разработана в соответствии с Федеральным законом от 27.07.2006 № 152-ФЗ «О персональных данных», Федеральным законом от 27.07.2006 № 149-ФЗ «Об информации, информационных технологиях и о защите информации» и иными актами законодательства Российской Федерации.</p>
+<p>1.2. Оператор персональных данных: ${PH('[ФИО / наименование, ИНН или статус самозанятого]')}. Контакт для обращений: ${PH('[e-mail]')}.</p>
+<p>1.3. Там, где закон требует согласия, оно запрашивается отдельно (например, при создании профиля).</p>
+<h4>2. Какие данные обрабатываются</h4>
+<p>2.1. В текущей версии Сервис работает локально в вашем браузере; серверов Оператора для хранения данных нет. Обрабатываются:</p>
+<ul>
+<li>имя или никнейм и адрес электронной почты, введённые при создании демонстрационного профиля, — хранятся только в памяти открытой страницы и никуда не передаются;</li>
+<li>тексты сообщений и прикреплённые фото — обрабатываются в браузере и исчезают при закрытии страницы;</li>
+<li>технические данные в localStorage браузера: выбранный язык, дата начала бесплатного периода, отметка о Pro-доступе, отметка о согласии и о закрытии уведомления;</li>
+<li>файлы локальной ИИ-модели (WebLLM) — один раз скачиваются с внешнего CDN (Hugging Face / MLC) и сохраняются в кэше браузера; после загрузки генерация ответов выполняется только на вашем устройстве, тексты сообщений на сервер не отправляются.</li>
+</ul>
+<p>2.2. Сервис не собирает специальные категории персональных данных (здоровье, религиозные и политические взгляды и т. п.) и биометрические данные, не запрашивает данные банковских карт, не использует аналитику и рекламные сети. Для локального ИИ один раз загружается библиотека WebLLM и веса модели с CDN; после кэширования работа возможна офлайн. Не вводите в чат лишние персональные данные (свои и чужие): паспортные, медицинские, платёжные.</p>
+<h4>3. Цели и правовые основания</h4>
+<ul>
+<li>предоставление функций Сервиса и учёт бесплатного периода — исполнение договора (п. 5 ч. 1 ст. 6 152-ФЗ);</li>
+<li>создание и использование профиля — согласие субъекта (п. 1 ч. 1 ст. 6, ст. 9 152-ФЗ);</li>
+<li>ответы на обращения пользователей — согласие субъекта;</li>
+<li>исполнение требований законодательства РФ — п. 2 ч. 1 ст. 6 152-ФЗ.</li>
+</ul>
+<h4>4. Сроки хранения</h4>
+<p>Данные страницы хранятся до её закрытия. Данные в localStorage хранятся до удаления через «Настройки → Данные на этом устройстве» или до очистки данных сайта в браузере. После подключения серверной части данные будут храниться в течение срока действия профиля и уничтожаться в срок, не превышающий 30 дней после удаления профиля или отзыва согласия, если иное не требуется законом.</p>
+<h4>5. Локализация и третьи лица</h4>
+<p>5.1. При появлении серверной части запись, систематизация, накопление, хранение, уточнение и извлечение персональных данных граждан РФ будут осуществляться с использованием баз данных на территории Российской Федерации (ч. 5 ст. 18 152-ФЗ).</p>
+<p>5.2. Оператор не продаёт персональные данные и не передаёт их третьим лицам, кроме случаев, предусмотренных законом. Привлечение обработчиков (хостинг, платёжный сервис, ИИ-модель) возможно только по поручению в соответствии с ч. 3 ст. 6 152-ФЗ; их перечень будет добавлен в Политику. Трансграничная передача допускается только в порядке, установленном ст. 12 152-ФЗ, с уведомлением Роскомнадзора.</p>
+<h4>6. Ваши права</h4>
+<p>Вы вправе: получить сведения об обработке своих данных (ст. 14); требовать их уточнения, блокирования или уничтожения (ст. 14, 21); отозвать согласие (ч. 2 ст. 9); обжаловать действия Оператора в Роскомнадзор (rkn.gov.ru) или в суд (ст. 17). Обращения направляйте на ${PH('[e-mail]')}; ответ предоставляется в течение 10 рабочих дней (ч. 1 ст. 20), срок может быть продлён не более чем на 5 рабочих дней с мотивированным уведомлением.</p>
+<h4>7. Меры защиты</h4>
+<p>В соответствии со ст. 19 152-ФЗ Оператор принимает правовые, организационные и технические меры защиты: данные остаются на вашем устройстве, сторонние скрипты не используются; в серверной версии — передача по HTTPS, разграничение доступа, хранение паролей только в виде хэшей, резервное копирование.</p>
+<h4>8. Несовершеннолетние</h4>
+<p>Сервис предназначен для учащихся. Лицам младше 14 лет создавать профиль можно только с участием родителей или законных представителей; в возрасте 14–17 лет — с согласия родителей, законных представителей.</p>
+<h4>9. Изменение Политики</h4>
+<p>Новая редакция публикуется в Сервисе и действует с момента публикации. Продолжение использования означает ознакомление с изменениями.</p>`},
+ terms:{t:'Пользовательское соглашение',h:`
+<p class="meta">Редакция от 11.10.2026.</p>
+<h4>1. Предмет</h4>
+<p>«Amix» — учебный помощник на основе ИИ. Использование Сервиса означает согласие с настоящим Соглашением и Политикой конфиденциальности. Правообладатель: ${PH('[ФИО / наименование, ИНН]')}.</p>
+<h4>2. Ответы ИИ</h4>
+<p>Ответы носят справочный характер, могут содержать ошибки и не заменяют преподавателя, врача, юриста или иного специалиста. Проверяйте важные результаты самостоятельно. Ответственность за использование ответов (в том числе соблюдение правил академической честности вашей школы или вуза) лежит на пользователе.</p>
+<h4>3. Правила использования</h4>
+<ul><li>не использовать Сервис для действий, нарушающих законодательство РФ или права третьих лиц;</li><li>не вводить персональные данные других лиц без законных оснований;</li><li>не пытаться нарушить работу Сервиса или обойти ограничения доступа.</li></ul>
+<h4>4. Возраст</h4>
+<p>Несовершеннолетние пользуются Сервисом с согласия родителей или законных представителей (ст. 26, 28 ГК РФ).</p>
+<h4>5. Интеллектуальные права</h4>
+<p>Интерфейс, дизайн и код Сервиса принадлежат Правообладателю. Содержимое ваших запросов принадлежит вам; вы разрешаете его обработку в объёме, необходимом для работы Сервиса.</p>
+<h4>6. Бесплатный период и Pro</h4>
+<p>Условия платного доступа изложены в Публичной оферте Pro.</p>
+<h4>7. Ответственность</h4>
+<p>Сервис предоставляется «как есть». Ответственность Правообладателя ограничивается в пределах, допустимых законом; права потребителя, которые нельзя ограничить, сохраняются (Закон РФ от 07.02.1992 № 2300-1 «О защите прав потребителей»).</p>
+<h4>8. Применимое право и споры</h4>
+<p>Применяется право Российской Федерации. Претензии направляются на ${PH('[e-mail]')} и рассматриваются в течение 10 дней. Потребитель вправе обратиться в суд по месту своего жительства (п. 2 ст. 17 Закона о защите прав потребителей).</p>
+<h4>9. Изменения</h4>
+<p>Правообладатель вправе изменять Соглашение; новая редакция действует с момента публикации.</p>`},
+ offer:{t:'Публичная оферта Amix Pro',h:`
+<p class="meta">Редакция от 11.10.2026.</p>
+<p><b>Важно:</b> в текущем прототипе оплата не подключена, кнопка покупки демонстрационная. Оферта вступает в силу с момента подключения приёма платежей.</p>
+<h4>1. Общие положения</h4>
+<p>Настоящий документ — публичная оферта (ст. 437 ГК РФ) ${PH('[ФИО / наименование, ИНН]')} о предоставлении платного доступа «Amix Pro». Акцептом является оплата (ст. 438 ГК РФ).</p>
+<h4>2. Предмет и стоимость</h4>
+<p>Доступ к Сервису после бесплатного периода. Стоимость — 200 ₽ за 1 календарный месяц. НДС: ${PH('[не облагается / ставка — уточнить по режиму налогообложения]')}.</p>
+<h4>3. Бесплатный период</h4>
+<p>После первого использования предоставляется 7 дней бесплатно. По окончании для продолжения требуется Amix Pro.</p>
+<h4>4. Оплата и чек</h4>
+<p>Оплата — через платёжный сервис. Кассовый чек (или чек самозанятого) направляется на указанный адрес в соответствии с законодательством РФ. Автоматическое продление не используется; если оно появится, потребуется отдельное явное согласие и возможность отключения в любой момент.</p>
+<h4>5. Отказ и возврат</h4>
+<p>Потребитель вправе отказаться от договора в любое время, оплатив фактически понесённые расходы (ст. 32 Закона о защите прав потребителей, ст. 782 ГК РФ). Требование о возврате за неиспользованный период направляется на ${PH('[e-mail]')} и рассматривается в течение 10 дней (ст. 31 Закона о защите прав потребителей).</p>
+<h4>6. Реквизиты</h4>
+<p>${PH('[ФИО / наименование, ИНН, ОГРНИП при наличии, e-mail, адрес]')}</p>`}},
+ en:{
+ policy:{t:'Privacy Policy',h:`
+<p class="meta">Version of 11.10.2026. Personal data processing policy under Russian Federal Law No. 152-FZ.</p>
+<h4>1. General</h4>
+<p>This Policy sets out how personal data is processed in Amix and which protections apply, in line with Federal Law No. 152-FZ “On Personal Data”, Federal Law No. 149-FZ and other Russian legislation. Operator: ${PH('[name / tax ID]')}. Contact: ${PH('[e-mail]')}. Where the law requires consent, it is requested separately (for example, when you create a profile).</p>
+<h4>2. Data processed</h4>
+<p>The current version runs locally in your browser; the Operator has no servers storing data. Processed: the name/nickname and e-mail you enter for the demo profile (kept in page memory only, never sent anywhere); message texts and attached photos (handled in your browser and gone when the page closes); technical items in browser localStorage (language, free-trial start date, Pro flag, consent and notice flags); local AI model files (WebLLM) are downloaded once from an external CDN (Hugging Face / MLC) and cached in the browser — after that, answers are generated only on your device and chat text is not sent to any server.</p>
+<p>No special-category or biometric data is collected, no card data is requested, and there is no analytics or advertising. For local AI, the WebLLM library and model weights are fetched once from a CDN; after caching, the app can run offline. Please do not enter unnecessary personal data (yours or anyone else’s) in the chat.</p>
+<h4>3. Purposes and legal grounds</h4>
+<p>Providing the Service and tracking the free period (performance of a contract, Art. 6(1)(5) of 152-FZ); creating and using a profile (consent, Art. 6(1)(1) and Art. 9); responding to requests (consent); complying with Russian law (Art. 6(1)(2)).</p>
+<h4>4. Retention</h4>
+<p>Page data is kept until the page is closed. localStorage data is kept until you delete it in Settings → Data on this device or clear site data. Once a server side exists, data will be kept while the profile is active and destroyed within 30 days after profile deletion or withdrawal of consent, unless the law requires otherwise.</p>
+<h4>5. Localization and third parties</h4>
+<p>When a server side appears, recording, storage and retrieval of personal data of Russian citizens will use databases located in the Russian Federation (Art. 18(5) of 152-FZ). Data is not sold or shared with third parties except as required by law; processors (hosting, payments, AI model) may be engaged only under Art. 6(3) and will be listed here. Cross-border transfer only under Art. 12 with notice to Roskomnadzor.</p>
+<h4>6. Your rights</h4>
+<p>You may obtain information about processing (Art. 14), request correction, blocking or deletion (Arts. 14, 21), withdraw consent (Art. 9(2)), and complain to Roskomnadzor (rkn.gov.ru) or a court (Art. 17). Send requests to ${PH('[e-mail]')}; we reply within 10 business days (Art. 20), extendable by up to 5 business days with a reasoned notice.</p>
+<h4>7. Security</h4>
+<p>Under Art. 19 the Operator applies legal, organizational and technical measures: data stays on your device and no third-party scripts are used; a server version will use HTTPS, access control, hashed passwords and backups.</p>
+<h4>8. Minors</h4>
+<p>Under 14: only with the participation of parents or legal representatives. Ages 14–17: with their consent.</p>
+<h4>9. Changes</h4>
+<p>A new version takes effect when published in the Service.</p>`},
+ terms:{t:'Terms of Use',h:`
+<p class="meta">Version of 11.10.2026.</p>
+<h4>1. Subject</h4><p>Amix is an AI study assistant. Using it means you accept these Terms and the Privacy Policy. Rights holder: ${PH('[name / tax ID]')}.</p>
+<h4>2. AI answers</h4><p>Answers are for reference only, may contain mistakes and do not replace a teacher, doctor, lawyer or other specialist. Verify important results yourself. You are responsible for how you use answers, including your school’s academic-integrity rules.</p>
+<h4>3. Rules</h4><p>Do not use the Service in violation of Russian law or third-party rights, do not enter other people’s personal data without a legal basis, and do not try to disrupt the Service.</p>
+<h4>4. Age</h4><p>Minors use the Service with the consent of parents or legal representatives.</p>
+<h4>5. IP</h4><p>The interface, design and code belong to the rights holder; the content of your requests belongs to you, and you allow its processing as needed to run the Service.</p>
+<h4>6. Liability</h4><p>The Service is provided “as is”, to the extent permitted by law; consumer rights that cannot be limited are preserved (Russian Consumer Protection Law No. 2300-1).</p>
+<h4>7. Law and disputes</h4><p>Russian law applies. Claims go to ${PH('[e-mail]')} and are reviewed within 10 days. A consumer may sue at their place of residence.</p>`},
+ offer:{t:'Amix Pro Public Offer',h:`
+<p class="meta">Version of 11.10.2026.</p>
+<p><b>Note:</b> payments are not connected in this prototype; the buy button is a demo. The offer takes effect once payments are connected.</p>
+<h4>1. General</h4><p>Public offer (Art. 437 of the Civil Code) by ${PH('[name / tax ID]')} for paid access “Amix Pro”. Acceptance is payment (Art. 438).</p>
+<h4>2. Price</h4><p>200 RUB per calendar month. VAT: ${PH('[not applicable / rate — confirm]')}.</p>
+<h4>3. Free period</h4><p>7 days free after first use; afterwards Amix Pro is required.</p>
+<h4>4. Payment and receipt</h4><p>Paid via a payment service; a receipt is issued as required by Russian law. No automatic renewal; if added, it will need separate explicit consent and can be turned off at any time.</p>
+<h4>5. Cancellation and refund</h4><p>A consumer may cancel at any time, paying for actually incurred costs (Art. 32 of the Consumer Protection Law, Art. 782 of the Civil Code). Refund requests for the unused period go to ${PH('[e-mail]')} and are reviewed within 10 days (Art. 31).</p>
+<h4>6. Details</h4><p>${PH('[name, tax ID, e-mail, address]')}</p>`}}};
+
+ Object.assign(I18N.ru,{legal_eyebrow:'ПРАВОВАЯ ИНФОРМАЦИЯ',lg_policy:'Политика',lg_terms:'Соглашение',lg_offer:'Оферта Pro',set_legal:'Правовая информация',set_legal_d:'Документы по законодательству РФ',set_wipe:'Данные на этом устройстве',set_wipe_d:'Удалить чаты, профиль и сохранённые настройки',set_wipe_btn:'Удалить',wipe_confirm:'Удалить все данные Amix на этом устройстве?',wiped:'Данные удалены',consent_required:'Для создания профиля нужно согласие на обработку персональных данных',ai_hint:'ИИ может ошибаться — проверяй важные ответы. Не вводи лишние персональные данные.',notice_text:'Мы сохраняем в браузере только язык и дату начала пробного периода. Аналитики и рекламы нет.',notice_more:'Подробнее',notice_ok:'Понятно',offer_link:'Публичная оферта'});
+ Object.assign(I18N.en,{legal_eyebrow:'LEGAL INFORMATION',lg_policy:'Policy',lg_terms:'Terms',lg_offer:'Pro offer',set_legal:'Legal information',set_legal_d:'Documents under Russian law',set_wipe:'Data on this device',set_wipe_d:'Delete chats, profile and saved settings',set_wipe_btn:'Delete',wipe_confirm:'Delete all Amix data on this device?',wiped:'Data deleted',consent_required:'Consent to personal data processing is required to create a profile',ai_hint:'AI can make mistakes — double-check important answers. Do not enter unnecessary personal data.',notice_text:'We store only your language and the free-trial start date in the browser. No analytics, no ads.',notice_more:'Details',notice_ok:'Got it',offer_link:'Public offer'});
+
+ let doc='policy';
+ const body=()=>document.getElementById('legalBody');
+ function renderLegal(){
+  const d=(L[LANG]||L.ru)[doc];if(!d||!body())return;
+  document.getElementById('privTitle').textContent=d.t;
+  body().innerHTML=d.h;body().scrollTop=0;
+  document.querySelectorAll('#legalTabs button').forEach(b=>b.classList.toggle('active',b.dataset.doc===doc));
+ }
+ window.openLegal=function(d){doc=d||'policy';renderLegal();document.getElementById('privBackdrop').classList.add('open')};
+ document.getElementById('legalTabs').addEventListener('click',e=>{const b=e.target.closest('button[data-doc]');if(b){doc=b.dataset.doc;renderLegal()}});
+
+ /* согласие при создании профиля */
+ const form=document.getElementById('authForm');
+ const lab=document.createElement('label');lab.className='consent';lab.style.display='none';
+ lab.innerHTML='<input type="checkbox" id="authConsent"><span id="consentTxt"></span>';
+ form.insertBefore(lab,document.getElementById('authSubmit'));
+ function renderConsent(){
+  document.getElementById('consentTxt').innerHTML=LANG==='en'
+   ?'I agree to the processing of my personal data under the <a href="#" data-doc="policy">Privacy Policy</a> and accept the <a href="#" data-doc="terms">Terms</a>.'
+   :'Я даю согласие на обработку персональных данных на условиях <a href="#" data-doc="policy">Политики конфиденциальности</a> и принимаю <a href="#" data-doc="terms">Соглашение</a>.';
+ }
+ lab.addEventListener('click',e=>{const a=e.target.closest('a[data-doc]');if(a){e.preventDefault();openLegal(a.dataset.doc)}});
+ const _sam=setAuthMode;
+ setAuthMode=function(m){_sam(m);lab.style.display=m==='signup'?'flex':'none'};
+ function needConsent(e){
+  if(authMode==='signup'&&!document.getElementById('authConsent').checked){e.preventDefault();e.stopImmediatePropagation();toast(t('consent_required'));return true}
+  return false;
+ }
+ document.getElementById('authSubmit').addEventListener('click',needConsent,true);
+ form.addEventListener('submit',e=>{
+  if(needConsent(e))return;
+  if(authMode==='signup'){try{localStorage.setItem('amix_consent',JSON.stringify({doc:'policy-2026-10-11',at:new Date().toISOString()}))}catch(_){}}
+ },true);
+
+ /* уведомление о хранении данных в браузере */
+ const n=document.createElement('div');n.id='storageNotice';n.setAttribute('role','dialog');
+ n.innerHTML='<span data-i18n="notice_text"></span><button type="button" class="chip" id="noticeMore" data-i18n="notice_more"></button><button type="button" class="chip" id="noticeOk" data-i18n="notice_ok"></button>';
+ document.body.appendChild(n);
+ let seen=false;try{seen=!!localStorage.getItem('amix_notice')}catch(_){}
+ if(!seen)setTimeout(()=>n.classList.add('show'),900);
+ document.getElementById('noticeOk').addEventListener('click',()=>{n.classList.remove('show');try{localStorage.setItem('amix_notice','1')}catch(_){}});
+ document.getElementById('noticeMore').addEventListener('click',()=>openLegal('policy'));
+
+ /* ссылка на оферту в Amix Pro */
+ const pro=document.getElementById('pro');
+ if(pro){const p=document.createElement('p');p.style.marginTop='12px';p.innerHTML='<button type="button" class="chip" data-i18n="offer_link" onclick="openLegal(\'offer\')"></button>';pro.appendChild(p)}
+
+ /* удаление данных на устройстве */
+ window.wipeLocalData=function(){
+  if(!confirm(t('wipe_confirm')))return;
+  try{['amix_lang','amix_guest_trial_v2','amix_consent','amix_notice'].forEach(k=>localStorage.removeItem(k))}catch(_){}
+  chats=[];currentChat=null;demoUser=null;resetChatView();renderHistory();updateAccountUI();toast(t('wiped'));
+  setTimeout(()=>location.reload(),700);
+ };
+
+ const _al=applyLang;
+ applyLang=function(){_al();renderLegal();renderConsent()};
+ applyLang();
+})();
+</script>
+
+<script type="module">
+/* Amix WebLLM — local offline AI */
+(function(){
+  const MODEL_PRIMARY = 'Qwen2.5-1.5B-Instruct-q4f16_1-MLC';
+  const MODEL_FALLBACK = 'Qwen2.5-0.5B-Instruct-q4f16_1-MLC';
+  let engine = null;
+  let ready = false;
+  let loading = false;
+  let activeModel = MODEL_PRIMARY;
+
+  function banner(){ return document.getElementById('modelBanner'); }
+  function btn(){ return document.getElementById('modelDownloadBtn'); }
+  function bar(){ return document.getElementById('modelBar'); }
+  function pct(){ return document.getElementById('modelPct'); }
+  function progress(){ return document.getElementById('modelProgress'); }
+  function sendBtn(){ return document.querySelector('#chatForm button[type="submit"]'); }
+  function promptEl(){ return document.getElementById('prompt'); }
+
+  function setBusy(on){
+    window.__amixGenerating = !!on;
+    const s = sendBtn(), p = promptEl();
+    if(s){ s.disabled = !!on || (p && p.disabled); }
+  }
+
+  function showBanner(show){
+    const b = banner();
+    if(!b) return;
+    b.classList.toggle('show', !!show);
+  }
+
+  function setProgress(frac, text){
+    const pr = progress(), ba = bar(), pc = pct();
+    if(pr) pr.style.display = 'block';
+    if(pc){ pc.style.display = 'block'; pc.textContent = text || ((Math.round((frac||0)*100)) + '%'); }
+    if(ba) ba.style.width = Math.max(0, Math.min(100, (frac||0)*100)).toFixed(1) + '%';
+  }
+
+  function hasWebGPU(){
+    return !!(navigator.gpu);
+  }
+
+  function systemPrompt(){
+    if(typeof LANG !== 'undefined' && LANG === 'en'){
+      return 'You are Amix, a study tutor. Answer in the user\'s language, explain step by step, simply and briefly.';
+    }
+    return 'Ты Amix, учебный репетитор. Отвечай на языке пользователя, объясняй по шагам, просто и кратко.';
+  }
+
+  function collectContext(){
+    const msgs = [];
+    try{
+      if(typeof currentChat !== 'undefined' && currentChat && Array.isArray(currentChat.msgs)){
+        const slice = currentChat.msgs.slice(-12);
+        for(const m of slice){
+          if(!m || !m.text) continue;
+          msgs.push({ role: m.who === 'user' ? 'user' : 'assistant', content: String(m.text).slice(0, 2000) });
+        }
+      }
+    }catch(_){}
+    // keep last 6 turns (up to 12 messages already) — ensure max 6 user+assistant pairs ≈ 6 msgs each side
+    while(msgs.length > 6) msgs.shift();
+    return msgs;
+  }
+
+  async function loadModel(modelId){
+    const { CreateMLCEngine } = await import('https://esm.run/@mlc-ai/web-llm');
+    const eng = await CreateMLCEngine(modelId, {
+      initProgressCallback: (report) => {
+        const f = typeof report.progress === 'number' ? report.progress : 0;
+        const txt = report.text ? report.text : (Math.round(f*100) + '%');
+        setProgress(f, txt);
+        if(btn()) btn().textContent = (typeof t === 'function' ? t('model_loading') : 'Loading…');
+      }
+    });
+    return eng;
+  }
+
+  async function download(){
+    if(loading || ready) return;
+    if(!hasWebGPU()){
+      addMsg(typeof t === 'function' ? t('model_no_webgpu') : 'WebGPU is not available.', 'ai');
+      showBanner(false);
+      return;
+    }
+    loading = true;
+    if(btn()){ btn().disabled = true; btn().textContent = (typeof t === 'function' ? t('model_loading') : 'Loading…'); }
+    setProgress(0, '0%');
+    try{
+      try{
+        engine = await loadModel(MODEL_PRIMARY);
+        activeModel = MODEL_PRIMARY;
+      }catch(err1){
+        console.warn('Primary model failed, trying fallback', err1);
+        if(typeof toast === 'function') toast(typeof t === 'function' ? t('model_fallback') : 'Switching to smaller model…');
+        setProgress(0, '0%');
+        try{
+          engine = await loadModel(MODEL_FALLBACK);
+          activeModel = MODEL_FALLBACK;
+        }catch(err2){
+          throw err2;
+        }
+      }
+      ready = true;
+      showBanner(false);
+      if(typeof toast === 'function') toast(typeof t === 'function' ? t('model_ready') : 'Model ready');
+      addMsg(typeof t === 'function' ? t('model_ready_chat') : 'Local AI is ready.', 'ai');
+    }catch(err){
+      console.error(err);
+      const m = String(err && err.message || err);
+      let key = 'model_error';
+      if(/quota|storage|space|disk/i.test(m)) key = 'model_error_space';
+      if(/network|fetch|Failed to fetch|load/i.test(m)) key = 'model_error_network';
+      if(/memory|OOM/i.test(m)) key = 'model_error_memory';
+      if(typeof toast === 'function') toast(typeof t === 'function' ? t(key) : m);
+      if(btn()){
+        btn().disabled = false;
+        btn().textContent = typeof t === 'function' ? t('model_retry') : 'Retry';
+      }
+      setProgress(0, '');
+    }finally{
+      loading = false;
+    }
+  }
+
+  async function reply(userText){
+    if(!engine || !ready){
+      const a = localAnswer(userText);
+      addMsg(a,'ai'); addHistory(userText,a);
+      return;
+    }
+    setBusy(true);
+    const box = document.getElementById('messages');
+    const el = document.createElement('div');
+    el.className = 'msg ai streaming';
+    const label = document.createElement('div');
+    label.className = 'who';
+    label.textContent = 'AMIX';
+    const body = document.createElement('div');
+    body.textContent = '';
+    el.append(label, body);
+    box.append(el);
+    box.scrollTop = box.scrollHeight;
+
+    const messages = [
+      { role: 'system', content: systemPrompt() },
+      ...collectContext().filter(m => m.content !== userText || m.role !== 'user'),
+      { role: 'user', content: userText }
+    ];
+    // dedupe: collectContext already has the user msg from addMsg — trim trailing duplicate user
+    // Actually addMsg pushes to currentChat before we call reply, so context includes the new user message.
+    // Use last 6 messages from currentChat as-is, plus system.
+    let ctx = [];
+    try{
+      if(currentChat && currentChat.msgs){
+        const slice = currentChat.msgs.slice(-6);
+        ctx = slice.map(m => ({ role: m.who === 'user' ? 'user' : 'assistant', content: String(m.text).slice(0, 2000) }));
+      }
+    }catch(_){}
+    const finalMessages = [{ role: 'system', content: systemPrompt() }, ...ctx];
+
+    let full = '';
+    try{
+      const chunks = await engine.chat.completions.create({
+        messages: finalMessages,
+        stream: true,
+        temperature: 0.7,
+        max_tokens: 1024
+      });
+      for await (const chunk of chunks){
+        const delta = chunk?.choices?.[0]?.delta?.content || '';
+        if(delta){
+          full += delta;
+          body.textContent = full;
+          box.scrollTop = box.scrollHeight;
+        }
+      }
+      if(!full.trim()){
+        full = typeof t === 'function' ? t('model_empty') : '…';
+        body.textContent = full;
+      }
+      el.classList.remove('streaming');
+      try{ addHistory(userText, full); }catch(_){}
+      // sync assistant text into currentChat (addMsg already added empty? No - we created DOM manually)
+      try{
+        if(currentChat && currentChat.msgs){
+          // user already pushed by addMsg; push assistant
+          const last = currentChat.msgs[currentChat.msgs.length-1];
+          if(!(last && last.who === 'ai' && last.text === full)){
+            currentChat.msgs.push({ text: full, who: 'ai' });
+          }
+        }
+      }catch(_){}
+      try{ if(typeof renderHistory === 'function') renderHistory(); }catch(_){}
+    }catch(err){
+      console.error(err);
+      el.classList.remove('streaming');
+      const msg = typeof t === 'function' ? t('model_gen_error') : 'Generation failed';
+      body.textContent = msg;
+      if(typeof toast === 'function') toast(msg);
+    }finally{
+      setBusy(false);
+    }
+  }
+
+  window.amixLLM = {
+    isReady: () => ready,
+    download,
+    reply,
+    modelId: () => activeModel
+  };
+
+  function bootUI(){
+    // WebGPU check message
+    if(!hasWebGPU()){
+      showBanner(true);
+      if(btn()){
+        btn().disabled = true;
+        btn().textContent = typeof t === 'function' ? t('model_no_webgpu_btn') : 'WebGPU required';
+      }
+      const desc = banner()?.querySelector('p');
+      // leave i18n to applyLang; add chat notice once
+      setTimeout(()=>{
+        try{
+          const welcome = document.querySelector('#messages .msg.ai');
+          // don't spam
+        }catch(_){}
+      }, 500);
+    } else {
+      showBanner(!ready);
+    }
+    const b = btn();
+    if(b) b.addEventListener('click', () => download());
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', bootUI);
+  else bootUI();
+
+  // re-show banner after lang apply
+  const _al = window.applyLang;
+  // applyLang may be reassigned later; poll once
+  setTimeout(()=>{
+    try{
+      if(typeof applyLang === 'function'){
+        const prev = applyLang;
+        applyLang = function(){
+          prev();
+          if(!ready && banner()){
+            showBanner(true);
+            if(btn() && !loading){
+              btn().disabled = !hasWebGPU();
+              btn().textContent = hasWebGPU()
+                ? t('model_download')
+                : t('model_no_webgpu_btn');
+            }
+          }
+        };
+      }
+    }catch(_){}
+  }, 0);
+})();
+</script>
+<script>
+/* PWA service worker registration */
+(function(){
+  if(!('serviceWorker' in navigator)) return;
+  window.addEventListener('load', function(){
+    navigator.serviceWorker.register('./sw.js').catch(function(e){ console.warn('SW', e); });
+  });
+})();
+</script>
+
+<script>
+(function(){
+  const extraRu = {
+    model_title:'Локальный ИИ',
+    model_desc:'Скачай модель один раз — дальше ответы работают без интернета. Сообщения не уходят с устройства.',
+    model_download:'Скачать ИИ-модель',
+    model_loading:'Загрузка…',
+    model_ready:'Модель готова',
+    model_ready_chat:'Локальный ИИ готов. Можно задавать любые вопросы — ответы считаются на этом устройстве.',
+    model_retry:'Повторить загрузку',
+    model_fallback:'Не хватает памяти — пробуем модель поменьше…',
+    model_no_webgpu:'В этом браузере нет WebGPU. Локальный ИИ недоступен. Открой Chrome/Edge на компьютере или Android, либо обнови браузер.',
+    model_no_webgpu_btn:'Нужен WebGPU',
+    model_error:'Не удалось загрузить модель',
+    model_error_space:'Не хватает места для модели. Освободи память устройства и попробуй снова.',
+    model_error_network:'Обрыв загрузки. Проверь интернет и нажми «Повторить».',
+    model_error_memory:'Не хватает памяти GPU/ОЗУ. Попробуй модель поменьше или закрой другие вкладки.',
+    model_empty:'Пустой ответ. Попробуй переформулировать вопрос.',
+    model_gen_error:'Ошибка генерации. Попробуй ещё раз.'
+  };
+  const extraEn = {
+    model_title:'Local AI',
+    model_desc:'Download the model once — then answers work offline. Messages never leave this device.',
+    model_download:'Download AI model',
+    model_loading:'Loading…',
+    model_ready:'Model ready',
+    model_ready_chat:'Local AI is ready. Ask anything — answers are computed on this device.',
+    model_retry:'Retry download',
+    model_fallback:'Not enough memory — trying a smaller model…',
+    model_no_webgpu:'WebGPU is not available in this browser. Local AI cannot run. Use Chrome/Edge on desktop or Android, or update your browser.',
+    model_no_webgpu_btn:'WebGPU required',
+    model_error:'Could not load the model',
+    model_error_space:'Not enough storage for the model. Free some space and try again.',
+    model_error_network:'Download interrupted. Check your connection and tap Retry.',
+    model_error_memory:'Not enough GPU/RAM. Try the smaller model or close other tabs.',
+    model_empty:'Empty reply. Try rephrasing your question.',
+    model_gen_error:'Generation failed. Please try again.'
+  };
+  function merge(){
+    if(typeof I18N === 'undefined') return;
+    Object.assign(I18N.ru||{}, extraRu);
+    Object.assign(I18N.en||{}, extraEn);
+    // update welcome / offline demos strings
+    if(I18N.ru){
+      I18N.ru.welcome = I18N.ru.welcome || 'Привет! Напиши, что нужно решить или объяснить.';
+      I18N.ru.ai_hint = 'ИИ может ошибаться — проверяй важные ответы. После загрузки модели сообщения не покидают устройство.';
+      I18N.ru.notice_text = 'Язык и дата пробного периода хранятся в браузере. Модель ИИ один раз скачивается с CDN, затем работает офлайн; тексты чата не отправляются на сервер.';
+    }
+    if(I18N.en){
+      I18N.en.ai_hint = 'AI can make mistakes — double-check important answers. After the model is downloaded, messages stay on this device.';
+      I18N.en.notice_text = 'We store only language and trial start date in the browser. The AI model is downloaded once from a CDN, then runs offline; chat text is not sent to a server.';
+    }
+  }
+  merge();
+  // patch localAnswer fallback messages to point to download
+  if(typeof localAnswer === 'function'){
+    const _la = localAnswer;
+    localAnswer = function(q){
+      if(window.amixLLM && window.amixLLM.isReady()){
+        return _la(q);
+      }
+      const a = _la(q);
+      const tip = (typeof LANG !== 'undefined' && LANG === 'en')
+        ? '\n\nTip: tap “Download AI model” above to enable full local answers.'
+        : '\n\nПодсказка: нажми «Скачать ИИ-модель» выше, чтобы включить полноценные локальные ответы.';
+      if(/нет полноценной языковой модели|no full language model|нет полноценной|no language model/i.test(a)){
+        return (typeof LANG !== 'undefined' && LANG === 'en')
+          ? 'I can solve simple equations and a few topics offline. For any question, download the local AI model (button above) — it runs on your device without sending messages to a server.'
+          : 'Пока могу решать простые уравнения и несколько тем офлайн. Для любых вопросов скачай локальную ИИ-модель (кнопка выше) — она работает на устройстве и не отправляет сообщения на сервер.';
+      }
+      return a;
+    };
+  }
+  // legal policy injection about model CDN
+  try{
+    // soft note via notice already updated
+  }catch(_){}
+  if(typeof applyLang === 'function'){ try{ applyLang(); }catch(_){} }
+})();
+</script>
+
+</body>
+</html>
